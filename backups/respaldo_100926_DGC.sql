@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `db_test_7b` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `db_test_7b`;
+-- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: db_test_7b
+-- Host: localhost    Database: db_test_7b
 -- ------------------------------------------------------
--- Server version	8.0.42
+-- Server version	8.4.9
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,10 +20,8 @@
 --
 -- Table structure for table `tb_logs`
 --
-
 DROP TABLE IF EXISTS `tb_logs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `tb_logs` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `table_name` varchar(80) NOT NULL,
@@ -31,8 +31,20 @@ CREATE TABLE `tb_logs` (
   `operation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `operation_status` bit(1) DEFAULT b'1',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB
+AUTO_INCREMENT=11
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+
+/*!40101 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;= @saved_cs_client */;
 
 --
 -- Dumping data for table `tb_logs`

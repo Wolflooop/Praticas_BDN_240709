@@ -1,28 +1,124 @@
-CREATE USER 'Diego.Garrido'@'%' IDENTIFIED BY '240709';
-CREATE USER 'nombre.apellido'@'%' IDENTIFIED BY 'sumatricula';
-CREATE USER 'Rodolfo.cs'@'%' IDENTIFIED BY '240836';
-CREATE USER 'Victor.Manuel'@'%' IDENTIFIED BY '240852';
+-- ============================================================
+-- CREACIÓN DE USUARIOS
+-- ============================================================
 
-/* Asignar los privilegios de super usuario IMPORTANTE: SOLO USTEDES!! */
-GRANT ALL PRIVILEGES ON *.* TO 'Diego.Garrido'@'%';
+CREATE USER IF NOT EXISTS 'Diego.Garrido'@'%'
+IDENTIFIED BY '240709';
 
-/* ASIGNAR PRIVILEGIOS DE SELECCIÓN, INSERCIÓN, ACTUALIZACIÓN Y ELIMINACIÓN */
-GRANT SELECT, UPDATE, INSERT, DELETE ON db_test_7b.* TO 'Victor.Manuel'@'%';
+CREATE USER IF NOT EXISTS 'nombre.apellido'@'%'
+IDENTIFIED BY 'sumatricula';
 
-/* CREACIÓN DE ROLES PARA EL SISTEMA DE ECOMMERCE */
-CREATE ROLE 'admin';
-CREATE ROLE 'seller';
-CREATE ROLE 'buyer';
-CREATE ROLE 'support';
-CREATE ROLE 'common';
-CREATE ROLE 'user_not_registered';
+CREATE USER IF NOT EXISTS 'Rodolfo.cs'@'%'
+IDENTIFIED BY '240836';
 
-/* ASIGNAR PRIVILEGIOS A LOS ROLES CREADOS */
-GRANT ALL PRIVILEGES ON db_test_7b.* TO 'admin';
--- Support
-GRANT SELECT, UPDATE, INSERT ON db_test_7b.* TO 'support';
+CREATE USER IF NOT EXISTS 'Victor.Manuel'@'%'
+IDENTIFIED BY '240852';
 
-/* ASIGNAR ROLES A LOS USUARIOS CREADOS */
-GRANT 'admin' TO 'Diego.Garrido'@'%';
 
-GRANT 'support' TO 'Victor.Manuel'@'%';
+-- ============================================================
+-- SUPER USUARIO
+-- SOLO PARA DIEGO
+-- ============================================================
+
+GRANT ALL PRIVILEGES
+ON *.*
+TO 'Diego.Garrido'@'%'
+WITH GRANT OPTION;
+
+
+-- ============================================================
+-- CREACIÓN DE ROLES
+-- ============================================================
+
+CREATE ROLE IF NOT EXISTS 'super_admin';
+
+CREATE ROLE IF NOT EXISTS 'admin';
+
+CREATE ROLE IF NOT EXISTS 'seller';
+
+CREATE ROLE IF NOT EXISTS 'buyer';
+
+CREATE ROLE IF NOT EXISTS 'support';
+
+CREATE ROLE IF NOT EXISTS 'common';
+
+CREATE ROLE IF NOT EXISTS 'user_not_registered';
+
+
+-- ============================================================
+-- PRIVILEGIOS DE SUPER ADMIN
+-- ============================================================
+
+GRANT ALL PRIVILEGES
+ON *.*
+TO 'super_admin'
+WITH GRANT OPTION;
+
+
+-- ============================================================
+-- PRIVILEGIOS DE SELLER
+-- ============================================================
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON db_test_7b.tb_products
+TO 'seller';
+
+
+-- ============================================================
+-- PRIVILEGIOS DE SUPPORT
+-- ============================================================
+
+GRANT SELECT, INSERT, UPDATE
+ON db_test_7b.tb_users
+TO 'support';
+
+GRANT SELECT, INSERT, UPDATE
+ON db_test_7b.tb_products
+TO 'support';
+
+
+-- ============================================================
+-- ASIGNACIÓN DE ROLES
+-- ============================================================
+
+GRANT 'super_admin'
+TO 'Diego.Garrido'@'%';
+
+GRANT 'seller'
+TO 'Victor.Manuel'@'%';
+
+GRANT 'support'
+TO 'Rodolfo.cs'@'%';
+
+
+-- ============================================================
+-- ROLES POR DEFECTO
+-- ============================================================
+
+SET DEFAULT ROLE 'super_admin'
+TO 'Diego.Garrido'@'%';
+
+SET DEFAULT ROLE 'seller'
+TO 'Victor.Manuel'@'%';
+
+SET DEFAULT ROLE 'support'
+TO 'Rodolfo.cs'@'%';
+
+
+-- ============================================================
+-- VERIFICACIÓN DE PRIVILEGIOS
+-- ============================================================
+
+SHOW GRANTS FOR 'Diego.Garrido'@'%';
+
+SHOW GRANTS FOR 'Victor.Manuel'@'%';
+
+SHOW GRANTS FOR 'Rodolfo.cs'@'%';
+
+SHOW GRANTS FOR 'nombre.apellido'@'%';
+
+SHOW GRANTS FOR 'super_admin';
+
+SHOW GRANTS FOR 'seller';
+
+SHOW GRANTS FOR 'support';
