@@ -1,8 +1,6 @@
-/*
-============================================================
-CREACIÓN DE USUARIOS
-============================================================
-*/
+/* ============================================================
+   CREACIÓN DE USUARIOS
+   ============================================================ */
 
 CREATE USER IF NOT EXISTS 'Diego.Garrido'@'%'
 IDENTIFIED BY '240709';
@@ -25,33 +23,26 @@ IDENTIFIED BY '240234';
 CREATE USER IF NOT EXISTS 'Josue.Oloarte'@'%'
 IDENTIFIED BY '240272';
 
+CREATE USER IF NOT EXISTS 'John'@'%'
+IDENTIFIED BY '240080';
 
-/*
-============================================================
-CREACIÓN DE ROLES
-============================================================
-*/
+
+/* ============================================================
+   CREACIÓN DE ROLES
+   ============================================================ */
 
 CREATE ROLE IF NOT EXISTS 'super_admin';
-
 CREATE ROLE IF NOT EXISTS 'admin';
-
 CREATE ROLE IF NOT EXISTS 'seller';
-
 CREATE ROLE IF NOT EXISTS 'buyer';
-
 CREATE ROLE IF NOT EXISTS 'support';
-
 CREATE ROLE IF NOT EXISTS 'common';
-
 CREATE ROLE IF NOT EXISTS 'user_not_registered';
 
 
-/*
-============================================================
-PRIVILEGIOS DE SUPER ADMIN
-============================================================
-*/
+/* ============================================================
+   PRIVILEGIOS DE SUPER ADMIN
+   ============================================================ */
 
 GRANT ALL PRIVILEGES
 ON *.*
@@ -59,33 +50,27 @@ TO 'super_admin'
 WITH GRANT OPTION;
 
 
-/*
-============================================================
-PRIVILEGIOS DE ADMIN
-============================================================
-*/
+/* ============================================================
+   PRIVILEGIOS DE ADMIN
+   ============================================================ */
 
 GRANT ALL PRIVILEGES
 ON db_test_7b.*
 TO 'admin';
 
 
-/*
-============================================================
-PRIVILEGIOS DE SELLER
-============================================================
-*/
+/* ============================================================
+   PRIVILEGIOS DE SELLER
+   ============================================================ */
 
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON db_test_7b.tb_products
 TO 'seller';
 
 
-/*
-============================================================
-PRIVILEGIOS DE SUPPORT
-============================================================
-*/
+/* ============================================================
+   PRIVILEGIOS DE SUPPORT
+   ============================================================ */
 
 GRANT SELECT, INSERT, UPDATE
 ON db_test_7b.tb_users
@@ -96,84 +81,70 @@ ON db_test_7b.tb_products
 TO 'support';
 
 
-/*
-============================================================
-PRIVILEGIOS DE COMMON
-============================================================
-*/
+/* ============================================================
+   PRIVILEGIOS DE COMMON
+   ============================================================ */
 
 GRANT SELECT
 ON db_test_7b.*
 TO 'common';
 
 
-/*
-============================================================
-ASIGNACIÓN DE ROLES A LOS USUARIOS
-============================================================
-*/
+/* ============================================================
+   ASIGNACIÓN DE ROLES A LOS USUARIOS
+   ============================================================ */
 
-/*
-SUPER ADMIN — DIEGO
-*/
+/* SUPER ADMIN — DIEGO */
 
 GRANT 'super_admin'
 TO 'Diego.Garrido'@'%';
 
 
-/*
-ADMIN — MARCO
-*/
+/* ADMIN — MARCO */
 
 GRANT 'admin'
 TO 'marco.ramirez'@'%';
 
 
-/*
-SELLER — JOSUÉ OLOARTE
-*/
+/* SELLER — JOSUÉ OLOARTE */
 
 GRANT 'seller'
 TO 'Josue.Oloarte'@'%';
 
 
-/*
-SELLER — MARIANNA MAYTE
-*/
+/* SELLER — MARIANNA MAYTE */
 
 GRANT 'seller'
 TO 'Marianna.Mayte'@'%';
 
 
-/*
-BUYER — RODOLFO
-*/
+/* BUYER — RODOLFO */
 
 GRANT 'buyer'
 TO 'Rodolfo.cs'@'%';
 
 
-/*
-SUPPORT — JEYSI DAMARI
-*/
+/* SUPPORT — JEYSI DAMARI */
 
 GRANT 'support'
 TO 'Jeysi.Damari'@'%';
 
 
-/*
-COMMON — VICTOR
-*/
+/* SUPPORT — JOHN */
+
+GRANT 'support'
+TO 'John'@'%';
+
+
+/* COMMON — VICTOR */
 
 GRANT 'common'
 TO 'Victor.Manuel'@'%';
 
 
-/*
-============================================================
-ESTABLECER ROLES PREDETERMINADOS
-============================================================
-*/
+/* ============================================================
+   ESTABLECER ROLES PREDETERMINADOS
+   ============================================================ */
 
 SET DEFAULT ROLE 'super_admin'
 TO 'Diego.Garrido'@'%';
@@ -193,15 +164,16 @@ TO 'Rodolfo.cs'@'%';
 SET DEFAULT ROLE 'support'
 TO 'Jeysi.Damari'@'%';
 
+SET DEFAULT ROLE 'support'
+TO 'John'@'%';
+
 SET DEFAULT ROLE 'common'
 TO 'Victor.Manuel'@'%';
 
 
-/*
-============================================================
-VERIFICACIÓN DE PRIVILEGIOS DE LOS USUARIOS
-============================================================
-*/
+/* ============================================================
+   VERIFICACIÓN DE PRIVILEGIOS DE LOS USUARIOS
+   ============================================================ */
 
 SHOW GRANTS FOR 'Diego.Garrido'@'%';
 
@@ -215,14 +187,14 @@ SHOW GRANTS FOR 'Rodolfo.cs'@'%';
 
 SHOW GRANTS FOR 'Jeysi.Damari'@'%';
 
+SHOW GRANTS FOR 'John'@'%';
+
 SHOW GRANTS FOR 'Victor.Manuel'@'%';
 
 
-/*
-============================================================
-VERIFICACIÓN DE PRIVILEGIOS DE LOS ROLES
-============================================================
-*/
+/* ============================================================
+   VERIFICACIÓN DE PRIVILEGIOS DE LOS ROLES
+   ============================================================ */
 
 SHOW GRANTS FOR 'super_admin';
 
@@ -239,11 +211,9 @@ SHOW GRANTS FOR 'common';
 SHOW GRANTS FOR 'user_not_registered';
 
 
-/*
-============================================================
-MENSAJE DE CONFIRMACIÓN
-============================================================
-*/
+/* ============================================================
+   MENSAJE DE CONFIRMACIÓN
+   ============================================================ */
 
 SELECT
     'Los usuarios, roles y privilegios han sido creados correctamente'
