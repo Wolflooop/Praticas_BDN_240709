@@ -32,11 +32,17 @@ IDENTIFIED BY '240080';
    ============================================================ */
 
 CREATE ROLE IF NOT EXISTS 'super_admin';
+
 CREATE ROLE IF NOT EXISTS 'admin';
+
 CREATE ROLE IF NOT EXISTS 'seller';
+
 CREATE ROLE IF NOT EXISTS 'buyer';
+
 CREATE ROLE IF NOT EXISTS 'support';
+
 CREATE ROLE IF NOT EXISTS 'common';
+
 CREATE ROLE IF NOT EXISTS 'user_not_registered';
 
 
@@ -95,80 +101,106 @@ TO 'common';
    ============================================================ */
 
 /* SUPER ADMIN — DIEGO */
-
 GRANT 'super_admin'
 TO 'Diego.Garrido'@'%';
 
 
 /* ADMIN — MARCO */
-
 GRANT 'admin'
 TO 'marco.ramirez'@'%';
 
 
-/* SELLER — JOSUÉ OLOARTE */
-
-GRANT 'seller'
-TO 'Josue.Oloarte'@'%';
-
-
-/* SELLER — MARIANNA MAYTE */
-
+/* SELLER — MAY / MARIANNA */
 GRANT 'seller'
 TO 'Marianna.Mayte'@'%';
 
 
-/* BUYER — RODOLFO */
+/* SELLER — DAMARI / JEYSI */
+GRANT 'seller'
+TO 'Jeysi.Damari'@'%';
 
+
+/* BUYER — RODOLFO */
 GRANT 'buyer'
 TO 'Rodolfo.cs'@'%';
 
 
-/* SUPPORT — JEYSI DAMARI */
-
-GRANT 'support'
-TO 'Jeysi.Damari'@'%';
-
-
 /* SUPPORT — JOHN */
-
 GRANT 'support'
 TO 'John'@'%';
 
 
 /* COMMON — VICTOR */
-
 GRANT 'common'
 TO 'Victor.Manuel'@'%';
+
+
+/* ============================================================
+   USUARIO SIN ROL SELLER
+   JOSUÉ CONSERVA SU CUENTA, PERO NO TIENE EL ROL SELLER
+   ============================================================ */
+
+REVOKE 'seller'
+FROM 'Josue.Oloarte'@'%';
 
 
 /* ============================================================
    ESTABLECER ROLES PREDETERMINADOS
    ============================================================ */
 
+/* DIEGO — SUPER ADMIN */
 SET DEFAULT ROLE 'super_admin'
 TO 'Diego.Garrido'@'%';
 
+
+/* MARCO — ADMIN */
 SET DEFAULT ROLE 'admin'
 TO 'marco.ramirez'@'%';
 
-SET DEFAULT ROLE 'seller'
-TO 'Josue.Oloarte'@'%';
 
+/* MAY / MARIANNA — SELLER */
 SET DEFAULT ROLE 'seller'
 TO 'Marianna.Mayte'@'%';
 
+
+/* DAMARI / JEYSI — SELLER */
+SET DEFAULT ROLE 'seller'
+TO 'Jeysi.Damari'@'%';
+
+
+/* RODOLFO — BUYER */
 SET DEFAULT ROLE 'buyer'
 TO 'Rodolfo.cs'@'%';
 
-SET DEFAULT ROLE 'support'
-TO 'Jeysi.Damari'@'%';
 
+/* JOHN — SUPPORT */
 SET DEFAULT ROLE 'support'
 TO 'John'@'%';
 
+
+/* VICTOR — COMMON */
 SET DEFAULT ROLE 'common'
 TO 'Victor.Manuel'@'%';
+
+
+/* ============================================================
+   CICLO DE INGRESO DE PRODUCTOS
+   ============================================================ */
+
+/*
+   El ciclo de ingreso se maneja entre los tres participantes
+   que tienen el rol seller:
+
+   MAY → DAMARI/JEYSI → MAY
+
+   y la relación cruzada:
+
+   MAY → DIEGO → DAMARI/JEYSI
+
+   NOTA:
+   Diego conserva únicamente el rol super_admin.
+   Diego no tiene el rol seller.
+*/
 
 
 /* ============================================================
@@ -179,13 +211,13 @@ SHOW GRANTS FOR 'Diego.Garrido'@'%';
 
 SHOW GRANTS FOR 'marco.ramirez'@'%';
 
-SHOW GRANTS FOR 'Josue.Oloarte'@'%';
-
 SHOW GRANTS FOR 'Marianna.Mayte'@'%';
 
-SHOW GRANTS FOR 'Rodolfo.cs'@'%';
-
 SHOW GRANTS FOR 'Jeysi.Damari'@'%';
+
+SHOW GRANTS FOR 'Josue.Oloarte'@'%';
+
+SHOW GRANTS FOR 'Rodolfo.cs'@'%';
 
 SHOW GRANTS FOR 'John'@'%';
 

@@ -13,7 +13,7 @@ IGNORE 1 LINES
     current_price,
     current_stock,
     @status
-)
+) 
 SET
     status = IF(@status = 1, b'1', b'0'),
     creation_date = CURRENT_TIMESTAMP,
