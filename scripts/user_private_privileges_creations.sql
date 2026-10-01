@@ -41,7 +41,7 @@ CREATE ROLE IF NOT EXISTS 'buyer';
 
 CREATE ROLE IF NOT EXISTS 'support';
 
-CREATE ROLE IF NOT EXISTS 'common';
+CREATE ROLE IF NOT EXISTS 'common_user';
 
 CREATE ROLE IF NOT EXISTS 'user_not_registered';
 
@@ -75,25 +75,46 @@ TO 'seller';
 
 
 /* ============================================================
+   PRIVILEGIOS DE BUYER
+   ============================================================ */
+
+GRANT SELECT
+ON db_test_7b.tb_products
+TO 'buyer';
+
+
+/* ============================================================
    PRIVILEGIOS DE SUPPORT
    ============================================================ */
+
+
 
 GRANT SELECT, INSERT, UPDATE
 ON db_test_7b.tb_users
 TO 'support';
 
-GRANT SELECT, INSERT, UPDATE
-ON db_test_7b.tb_products
-TO 'support';
-
 
 /* ============================================================
-   PRIVILEGIOS DE COMMON
+   PRIVILEGIOS DE COMMON_USER
    ============================================================ */
 
 GRANT SELECT
 ON db_test_7b.*
-TO 'common';
+TO 'common_user';
+
+
+/* ============================================================
+   PRIVILEGIOS DE USER_NOT_REGISTERED
+   ============================================================ */
+
+/*
+   Usuario no registrado:
+   solamente puede consultar productos.
+*/
+
+GRANT SELECT
+ON db_test_7b.tb_products
+TO 'user_not_registered';
 
 
 /* ============================================================
@@ -101,47 +122,51 @@ TO 'common';
    ============================================================ */
 
 /* SUPER ADMIN — DIEGO */
+
 GRANT 'super_admin'
 TO 'Diego.Garrido'@'%';
 
 
 /* ADMIN — MARCO */
+
 GRANT 'admin'
 TO 'marco.ramirez'@'%';
 
 
-/* SELLER — MAY / MARIANNA */
+/* SELLER — MARIANNA */
+
 GRANT 'seller'
 TO 'Marianna.Mayte'@'%';
 
 
-/* SELLER — DAMARI / JEYSI */
+/* SELLER — JEYSI */
+
 GRANT 'seller'
 TO 'Jeysi.Damari'@'%';
 
 
 /* BUYER — RODOLFO */
+
 GRANT 'buyer'
 TO 'Rodolfo.cs'@'%';
 
 
-/* SUPPORT — JOHN */
+/* SUPPORT — VICTOR */
+
 GRANT 'support'
-TO 'John'@'%';
-
-
-/* COMMON — VICTOR */
-GRANT 'common'
 TO 'Victor.Manuel'@'%';
 
 
-/* ============================================================
-   USUARIO SIN ROL SELLER
-   JOSUÉ CONSERVA SU CUENTA, PERO NO TIENE EL ROL SELLER
-   ============================================================ */
+/* COMMON USER — JOSUÉ */
 
-REVOKE 'seller'
-FROM 'Josue.Oloarte'@'%';
+GRANT 'common_user'
+TO 'Josue.Oloarte'@'%';
+
+
+/* USER NOT REGISTERED — JOHN */
+
+GRANT 'user_not_registered'
+TO 'John'@'%';
 
 
 /* ============================================================
@@ -149,38 +174,51 @@ FROM 'Josue.Oloarte'@'%';
    ============================================================ */
 
 /* DIEGO — SUPER ADMIN */
+
 SET DEFAULT ROLE 'super_admin'
 TO 'Diego.Garrido'@'%';
 
 
 /* MARCO — ADMIN */
+
 SET DEFAULT ROLE 'admin'
 TO 'marco.ramirez'@'%';
 
 
-/* MAY / MARIANNA — SELLER */
+/* MARIANNA — SELLER */
+
 SET DEFAULT ROLE 'seller'
 TO 'Marianna.Mayte'@'%';
 
 
-/* DAMARI / JEYSI — SELLER */
+/* JEYSI — SELLER */
+
 SET DEFAULT ROLE 'seller'
 TO 'Jeysi.Damari'@'%';
 
 
 /* RODOLFO — BUYER */
+
 SET DEFAULT ROLE 'buyer'
 TO 'Rodolfo.cs'@'%';
 
 
-/* JOHN — SUPPORT */
+/* VICTOR — SUPPORT */
+
 SET DEFAULT ROLE 'support'
-TO 'John'@'%';
-
-
-/* VICTOR — COMMON */
-SET DEFAULT ROLE 'common'
 TO 'Victor.Manuel'@'%';
+
+
+/* JOSUÉ — COMMON USER */
+
+SET DEFAULT ROLE 'common_user'
+TO 'Josue.Oloarte'@'%';
+
+
+/* JOHN — USER NOT REGISTERED */
+
+SET DEFAULT ROLE 'user_not_registered'
+TO 'John'@'%';
 
 
 /* ============================================================
@@ -188,18 +226,17 @@ TO 'Victor.Manuel'@'%';
    ============================================================ */
 
 /*
-   El ciclo de ingreso se maneja entre los tres participantes
+   El ciclo de ingreso se maneja entre los participantes
    que tienen el rol seller:
 
-   MAY → DAMARI/JEYSI → MAY
+   MARIANNA → JEYSI → MARIANNA
 
-   y la relación cruzada:
+   Relación cruzada:
 
-   MAY → DIEGO → DAMARI/JEYSI
+   MARIANNA → DIEGO → JEYSI
 
-   NOTA:
    Diego conserva únicamente el rol super_admin.
-   Diego no tiene el rol seller.
+   Diego NO tiene el rol seller.
 */
 
 
@@ -219,9 +256,9 @@ SHOW GRANTS FOR 'Josue.Oloarte'@'%';
 
 SHOW GRANTS FOR 'Rodolfo.cs'@'%';
 
-SHOW GRANTS FOR 'John'@'%';
-
 SHOW GRANTS FOR 'Victor.Manuel'@'%';
+
+SHOW GRANTS FOR 'John'@'%';
 
 
 /* ============================================================
@@ -238,9 +275,20 @@ SHOW GRANTS FOR 'buyer';
 
 SHOW GRANTS FOR 'support';
 
-SHOW GRANTS FOR 'common';
+SHOW GRANTS FOR 'common_user';
 
 SHOW GRANTS FOR 'user_not_registered';
+
+
+/* ============================================================
+   VERIFICACIÓN DE ROLES ASIGNADOS
+   ============================================================ */
+
+SELECT
+    FROM_USER,
+    TO_USER,
+    DEFAULT_ROLE
+FROM mysql.role_edges;
 
 
 /* ============================================================

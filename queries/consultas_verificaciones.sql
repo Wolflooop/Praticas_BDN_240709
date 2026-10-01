@@ -102,4 +102,15 @@ FROM tb_products;
 
 SELECT * 
 FROM vw_trazabilidad_productos
+ORDER BY operation_date DESC
 LIMIT 10;
+
+/*13. Consulta la trazabilidad de usuarios*/
+SELECT * 
+FROM vw_trazabilidad_usuarios
+ORDER BY operation_date ASC;
+
+/*14. Consulta la trazabilidad de usuarios*/
+SELECT * FROM vw_trazabilidad_usuarios ORDER BY operation_date ASC;
+/*15. Contabilidad cuantos productos por tabla hay por usuarios*/
+SELECT COUNT(*), vp.inserted_by FROM vw_trazabilidad_productos vp GROUP BY vp.inserted_by;
