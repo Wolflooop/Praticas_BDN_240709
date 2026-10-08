@@ -1,14 +1,4 @@
 ID,SKU,name,description,current_price,current_stock,status
-1,TEC-00001,Extension electrica Mistral de 3 metros con 6 contactos modelo 9392,"Extension electrica Mistral de 3 metros con 6 contactos, facil de instalar, materiales de primera calidad.",416.42,188,1
-2,MUE-00001,Mesa auxiliar plegable Hexa con ruedas modelo 4006,"Mesa auxiliar plegable Hexa con ruedas, ahorra espacio, de facil mantenimiento.",881.48,381,1
-3,AUT-00001,Balatas Tigris deportivas modelo 8094,"Balatas Tigris deportivas, facil aplicacion, disenado para durar.",254.65,477,1
-4,MON-00001,Monitor profesional Ventus de 27 pulgadas 4K IPS calibrado modelo 1591,"Monitor profesional Ventus de 27 pulgadas 4K IPS calibrado, compatible con soporte VESA, disenado para durar.",12056.57,276,1
-5,SEG-00001,Kit de videovigilancia Vigia de 8 camaras modelo 7087,"Kit de videovigilancia Vigia de 8 camaras, mayor tranquilidad, materiales de primera calidad.",2512.51,27,1
-6,ALM-00001,Docking station Umbral para discos con funcion clonador modelo 6954,"Docking station Umbral para discos con funcion clonador, bajo consumo de energia, practico y versatil.",941.92,23,1
-7,PAP-00001,Plumas de gel Ventus paquete de 10 colores modelo 2806,"Plumas de gel Ventus paquete de 10 colores, buen precio, practico y versatil.",208.63,11,1
-8,ACA-00001,Arrancador de baterias Tigris con linterna modelo 6838,"Arrancador de baterias Tigris con linterna, ajuste seguro, ideal para uso diario.",1513.84,375,0
-9,PAP-00002,Compas de precision Kilate de metal modelo 3124,"Compas de precision Kilate de metal, no toxico, ideal para uso diario.",109.50,306,1
-10,ACP-00001,Reloj de pulsera Gravia analogico con correa de cuero modelo 9956,"Reloj de pulsera Gravia analogico con correa de cuero, acabado fino, acabado profesional.",407.31,3,1
 11,COM-00001,Memoria RAM DDR5 Gravia de 16 GB 5600 MHz modelo 2271,"Memoria RAM DDR5 Gravia de 16 GB 5600 MHz, disipacion eficiente, ideal para uso diario.",1258.46,3,1
 12,DEP-00001,Raqueta de padel Bruma de fibra de vidrio modelo 3272,"Raqueta de padel Bruma de fibra de vidrio, materiales de alta resistencia, con empaque original sellado.",1220.95,43,1
 13,ILU-00001,Serie de luces navidenas Nodo de 300 luces modelo 4627,"Serie de luces navidenas Nodo de 300 luces, luz uniforme, practico y versatil.",399.43,214,1
