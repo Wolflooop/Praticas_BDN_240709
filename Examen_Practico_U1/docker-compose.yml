@@ -1,0 +1,188 @@
+
+services:
+  # ============================================================
+  # MYSQL
+  # ============================================================
+  mysql:
+    image: mysql:8.4
+    container_name: mysql_db
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 1m
+
+    environment:
+      MYSQL_ROOT_PASSWORD: "Silver6811$$DEX$$"
+      MYSQL_DATABASE: db_test_7b
+      MYSQL_USER: "240709wolfdata.tech"
+      MYSQL_PASSWORD: "Silver6811$$DEX$$"
+      TZ: America/Mexico_City
+
+    command:
+      - --port=40710
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --max-connections=200
+
+    ports:
+      - "40710:40710"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - mysql_network
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'mysqladmin ping -h 127.0.0.1 -P 40710 -u root -p"$${MYSQL_ROOT_PASSWORD}" --silent'
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+    tmpfs:
+      - /tmp
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # ============================================================
+  # POSTGRESQL
+  # ============================================================
+  postgres:
+    image: postgres:17
+    container_name: postgres_db
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 1m
+
+    environment:
+      POSTGRES_USER: "240709wolfdata.tech"
+      POSTGRES_PASSWORD: "Silver6811$$DEX$$"
+      POSTGRES_DB: db_test_7b
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+      TZ: America/Mexico_City
+      PGTZ: America/Mexico_City
+
+    ports:
+      - "40709:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - postgres_network
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'pg_isready -h 127.0.0.1 -p 5432 -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"'
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    tmpfs:
+      - /tmp
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # ============================================================
+  # PGADMIN - INTERFAZ WEB PARA POSTGRESQL
+  # ============================================================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_web
+    restart: unless-stopped
+    init: true
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "Diego.Garrido@wolfdata.tech"
+      PGADMIN_DEFAULT_PASSWORD: "240709"
+      PGADMIN_CONFIG_SERVER_MODE: "True"
+      TZ: America/Mexico_City
+
+    ports:
+      - "40711:80"
+
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+    networks:
+      - postgres_network
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # ============================================================
+  # PHPMYADMIN - INTERFAZ WEB PARA MYSQL
+  # ============================================================
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_web
+    restart: unless-stopped
+    init: true
+
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: "40710"
+      PMA_ARBITRARY: "0"
+      UPLOAD_LIMIT: 64M
+      TZ: America/Mexico_City
+
+    ports:
+      - "40712:80"
+
+    networks:
+      - mysql_network
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+# ============================================================
+# VOLUMENES PERSISTENTES
+# ============================================================
+volumes:
+  mysql_data:
+    name: mysql_data_7b
+
+  postgres_data:
+    name: postgres_data_7b
+
+  pgadmin_data:
+    name: pgadmin_data_7b
+
+# ============================================================
+# REDES INDEPENDIENTES
+# ============================================================
+networks:
+  mysql_network:
+    name: mysql_network_7b
+    driver: bridge
+
+  postgres_network:
+    name: postgres_network_7b
+    driver: bridge
