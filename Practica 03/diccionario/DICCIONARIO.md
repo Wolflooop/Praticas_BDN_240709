@@ -12,25 +12,26 @@ El tipo SQL describe almacenamiento; la clasificación describe la naturaleza co
 - Base: `db_test_7b`
 - Tablas: 13; columnas: 93; FK: 15
 - Vistas: 13; procedimientos: 2; funciones: 0; triggers: 36
+- El DDL no declara restricciones CHECK.
 - Conexión activa: no configurada. El dump no acredita que este sea el estado vigente de un servidor.
 
 ## Relaciones
 
-- `tb_buyer_orders.seller_ID` → `tb_users.ID` (restricción `tb_buyer_orders_ibfk_1`).
-- `tb_carts.user_ID` → `tb_users.ID` (restricción `tb_carts_ibfk_1`).
-- `tb_categories.sup_id_category` → `tb_categories.ID` (restricción `fk_superior_category`).
-- `tb_product_categories.category_Id` → `tb_categories.ID` (restricción `fk_pc_category`).
-- `tb_product_categories.product_Id` → `tb_products.ID` (restricción `fk_pc_product`).
-- `tbd_carts_items.cart_ID` → `tb_carts.ID` (restricción `fk_cart_items_cart`).
-- `tbd_carts_items.provider_ID, product_ID` → `tbd_products_users_providers.user_ID, product_ID` (restricción `fk_cart_items_provider_product`).
-- `tbd_order_items.seller_order_ID` → `tb_buyer_orders.ID` (restricción `tbd_order_items_ibfk_1`).
-- `tbd_order_items.product_ID, provider_ID` → `tbd_products_users_providers.product_ID, user_ID` (restricción `tbd_order_items_ibfk_2`).
-- `tbd_products_users_providers.product_ID` → `tb_products.ID` (restricción `fk_products2`).
-- `tbd_products_users_providers.user_ID` → `tb_users.ID` (restricción `fk_user1`).
-- `tbd_user_payment_methods.user_ID` → `tb_users.ID` (restricción `tbd_user_payment_methods_ibfk_1`).
-- `tbd_user_payment_methods.payment_method_type_ID` → `tbc_payment_methods_types.ID` (restricción `tbd_user_payment_methods_ibfk_2`).
-- `tbd_users_wishlist_products.product_ID` → `tb_products.ID` (restricción `fk_products3`).
-- `tbd_users_wishlist_products.user_ID` → `tb_users.ID` (restricción `fk_user2`).
+- `tb_buyer_orders.seller_ID` → `tb_users.ID` (restricción `tb_buyer_orders_ibfk_1`; cardinalidad N:1; opcionalidad en origen: no).
+- `tb_carts.user_ID` → `tb_users.ID` (restricción `tb_carts_ibfk_1`; cardinalidad 1:1; opcionalidad en origen: no).
+- `tb_categories.sup_id_category` → `tb_categories.ID` (restricción `fk_superior_category`; cardinalidad N:1; opcionalidad en origen: sí).
+- `tb_product_categories.category_Id` → `tb_categories.ID` (restricción `fk_pc_category`; cardinalidad N:1; opcionalidad en origen: no).
+- `tb_product_categories.product_Id` → `tb_products.ID` (restricción `fk_pc_product`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_carts_items.cart_ID` → `tb_carts.ID` (restricción `fk_cart_items_cart`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_carts_items.provider_ID, product_ID` → `tbd_products_users_providers.user_ID, product_ID` (restricción `fk_cart_items_provider_product`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_order_items.seller_order_ID` → `tb_buyer_orders.ID` (restricción `tbd_order_items_ibfk_1`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_order_items.product_ID, provider_ID` → `tbd_products_users_providers.product_ID, user_ID` (restricción `tbd_order_items_ibfk_2`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_products_users_providers.product_ID` → `tb_products.ID` (restricción `fk_products2`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_products_users_providers.user_ID` → `tb_users.ID` (restricción `fk_user1`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_user_payment_methods.user_ID` → `tb_users.ID` (restricción `tbd_user_payment_methods_ibfk_1`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_user_payment_methods.payment_method_type_ID` → `tbc_payment_methods_types.ID` (restricción `tbd_user_payment_methods_ibfk_2`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_users_wishlist_products.product_ID` → `tb_products.ID` (restricción `fk_products3`; cardinalidad N:1; opcionalidad en origen: no).
+- `tbd_users_wishlist_products.user_ID` → `tb_users.ID` (restricción `fk_user2`; cardinalidad N:1; opcionalidad en origen: no).
 
 ## Diccionario de tablas
 
@@ -38,7 +39,7 @@ El tipo SQL describe almacenamiento; la clasificación describe la naturaleza co
 
 Registra la cabecera de cada orden generada para un vendedor. Conserva importes agregados, estado de cumplimiento y marcas de tiempo; las partidas detalladas se relacionan mediante tbd_order_items.
 
-**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tb_buyer_orders_ibfk_1: seller_ID → tb_users.ID
+**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tb_buyer_orders_ibfk_1: seller_ID → tb_users.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): ID; seller_ID (INDEX): seller_ID. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -61,7 +62,7 @@ Registra la cabecera de cada orden generada para un vendedor. Conserva importes 
 
 Representa el carrito asociado a una cuenta. Su identificador permite agrupar las partidas del carrito y su estado y fechas permiten conocer su vigencia y trazabilidad.
 
-**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tb_carts_ibfk_1: user_ID → tb_users.ID
+**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tb_carts_ibfk_1: user_ID → tb_users.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): ID; uk_cart_user (UNIQUE): user_ID. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -81,7 +82,7 @@ Representa el carrito asociado a una cuenta. Su identificador permite agrupar la
 
 Catálogo jerárquico para clasificar productos. La referencia opcional a otra categoría permite expresar una categoría superior; tb_product_categories materializa la asignación de productos.
 
-**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** fk_superior_category: sup_id_category → tb_categories.ID
+**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** fk_superior_category: sup_id_category → tb_categories.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): ID; name (UNIQUE): name; fk_superior_category (INDEX): sup_id_category. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -126,7 +127,7 @@ Almacena eventos de auditoría generados por las operaciones observadas en el re
 
 Tabla asociativa que enlaza productos y categorías. La clave primaria compuesta evita repetir la misma pareja y sus FK conservan la integridad referencial.
 
-**Motor:** InnoDB · **Clave primaria:** product_Id, category_Id · **Claves foráneas:** fk_pc_category: category_Id → tb_categories.ID; fk_pc_product: product_Id → tb_products.ID
+**Motor:** InnoDB · **Clave primaria:** product_Id, category_Id · **Claves foráneas:** fk_pc_category: category_Id → tb_categories.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente; fk_pc_product: product_Id → tb_products.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): product_Id, category_Id; fk_pc_category (INDEX): category_Id. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -214,7 +215,7 @@ Catálogo de tipos de medio de pago identificados por código y descripción. La
 
 Relaciona un carrito con un producto y un proveedor, incluyendo la cantidad solicitada y la fecha de incorporación. Permite consultar el contenido detallado del carrito.
 
-**Motor:** InnoDB · **Clave primaria:** cart_ID, provider_ID, product_ID · **Claves foráneas:** fk_cart_items_cart: cart_ID → tb_carts.ID; fk_cart_items_provider_product: provider_ID, product_ID → tbd_products_users_providers.user_ID, product_ID
+**Motor:** InnoDB · **Clave primaria:** cart_ID, provider_ID, product_ID · **Claves foráneas:** fk_cart_items_cart: cart_ID → tb_carts.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente; fk_cart_items_provider_product: provider_ID, product_ID → tbd_products_users_providers.user_ID, product_ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): cart_ID, provider_ID, product_ID; idx_cart_items_provider_product (INDEX): provider_ID, product_ID. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -234,7 +235,7 @@ Relaciona un carrito con un producto y un proveedor, incluyendo la cantidad soli
 
 Detalle de los productos incluidos en una orden de vendedor. Conserva nombre de producto y precio unitario como datos de la partida, además de cantidad y subtotal.
 
-**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tbd_order_items_ibfk_1: seller_order_ID → tb_buyer_orders.ID; tbd_order_items_ibfk_2: product_ID, provider_ID → tbd_products_users_providers.product_ID, user_ID
+**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tbd_order_items_ibfk_1: seller_order_ID → tb_buyer_orders.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente; tbd_order_items_ibfk_2: product_ID, provider_ID → tbd_products_users_providers.product_ID, user_ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): ID; seller_order_ID (INDEX): seller_order_ID; product_ID_provider_ID (INDEX): product_ID, provider_ID. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -258,7 +259,7 @@ Detalle de los productos incluidos en una orden de vendedor. Conserva nombre de 
 
 Registra la asociación entre un producto y un usuario proveedor, junto con el tipo de titularidad, estado y fechas de disponibilidad y seguimiento.
 
-**Motor:** InnoDB · **Clave primaria:** user_ID, product_ID · **Claves foráneas:** fk_products2: product_ID → tb_products.ID; fk_user1: user_ID → tb_users.ID
+**Motor:** InnoDB · **Clave primaria:** user_ID, product_ID · **Claves foráneas:** fk_products2: product_ID → tb_products.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente; fk_user1: user_ID → tb_users.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): user_ID, product_ID; uidx_product_user (UNIQUE): product_ID, user_ID. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -280,7 +281,7 @@ Registra la asociación entre un producto y un usuario proveedor, junto con el t
 
 Asocia una cuenta de usuario con un tipo de medio de pago y conserva referencias y etiquetas del proveedor, últimos cuatro dígitos, indicador predeterminado y estado. El esquema no incluye el número completo de tarjeta.
 
-**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tbd_user_payment_methods_ibfk_1: user_ID → tb_users.ID; tbd_user_payment_methods_ibfk_2: payment_method_type_ID → tbc_payment_methods_types.ID
+**Motor:** InnoDB · **Clave primaria:** ID · **Claves foráneas:** tbd_user_payment_methods_ibfk_1: user_ID → tb_users.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente; tbd_user_payment_methods_ibfk_2: payment_method_type_ID → tbc_payment_methods_types.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): ID; uk_provider_method (UNIQUE): provider, provider_method_ref; user_ID (INDEX): user_ID; payment_method_type_ID (INDEX): payment_method_type_ID. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -296,7 +297,7 @@ Asocia una cuenta de usuario con un tipo de medio de pago y conserva referencias
 | `provider` | proveedor del medio de pago. Clasificación: **Cualitativa nominal**. Texto o código categórico; no se asume un orden estadístico. | `varchar(60); parámetro SQL 60` | No | Única; NOT NULL | «texto de ejemplo» |
 | `provider_method_ref` | referencia del medio asignada por el proveedor. Clasificación: **Cualitativa nominal**. Texto o código categórico; no se asume un orden estadístico. | `varchar(255); parámetro SQL 255` | No | Única; NOT NULL | «texto de ejemplo» |
 | `label` | etiqueta descriptiva del medio de pago. Clasificación: **Cualitativa nominal**. Texto o código categórico; no se asume un orden estadístico. | `varchar(100); parámetro SQL 100` | Sí | —; DEFAULT NULL; DEFAULT NULL | «texto de ejemplo» |
-| `last_four` | últimos cuatro dígitos identificadores del medio. Clasificación: **Cualitativa nominal**. Texto o código categórico; no se asume un orden estadístico. | `char(4); parámetro SQL 4` | Sí | —; DEFAULT NULL; DEFAULT NULL | «texto de ejemplo» |
+| `last_four` | últimos cuatro dígitos identificadores del medio. Clasificación: **Cualitativa nominal**. Texto o código categórico; no se asume un orden estadístico. | `char(4); parámetro SQL 4` | Sí | —; DEFAULT NULL; DEFAULT NULL | 0427 (ficticio; cuatro dígitos) |
 | `is_default` | indicador de medio de pago predeterminado. Clasificación: **Binaria o lógica**. Bandera lógica; la convención numérica o binaria proviene del tipo SQL. | `tinyint(1); parámetro SQL 1` | No | —; DEFAULT '0'; NOT NULL DEFAULT '0' | 3 (ilustrativo) |
 | `status` | indicador de estado del registro. Clasificación: **Binaria o lógica**. Bandera lógica; la convención numérica o binaria proviene del tipo SQL. | `bit(1); parámetro SQL 1` | No | —; DEFAULT b'1'; NOT NULL DEFAULT b'1' | b'1' (ilustrativo) |
 | `creation_date` | fecha y hora de creación. Clasificación: **Temporal**. Fecha u hora registrada por el sistema. | `datetime` | No | —; DEFAULT CURRENT_TIMESTAMP; NOT NULL DEFAULT CURRENT_TIMESTAMP | 2026-10-21 10:30:00 (formato ilustrativo) |
@@ -306,7 +307,7 @@ Asocia una cuenta de usuario con un tipo de medio de pago y conserva referencias
 
 Tabla asociativa que registra qué productos agregó cada usuario a su lista de deseos, junto con estado y fechas de creación y actualización.
 
-**Motor:** InnoDB · **Clave primaria:** user_ID, product_ID · **Claves foráneas:** fk_products3: product_ID → tb_products.ID; fk_user2: user_ID → tb_users.ID
+**Motor:** InnoDB · **Clave primaria:** user_ID, product_ID · **Claves foráneas:** fk_products3: product_ID → tb_products.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente; fk_user2: user_ID → tb_users.ID; ON DELETE no especificado explícitamente; ON UPDATE no especificado explícitamente
 
 **Índices y restricciones:** PRIMARY (PRIMARY KEY): user_ID, product_ID; fk_products3 (INDEX): product_ID. **Auditoría:** el esquema incluye campos de estado y/o fechas de ciclo de vida cuando se muestran abajo; la trazabilidad adicional depende de los triggers listados en Objetos relacionados.
 
@@ -349,42 +350,42 @@ No se encontraron funciones almacenadas en este respaldo.
 
 ## Disparadores (triggers)
 
-- `trg_tb_buyer_orders_ai` — disparador posterior a INSERT sobre `tb_buyer_orders`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_buyer_orders_au` — disparador posterior a UPDATE sobre `tb_buyer_orders`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_buyer_orders_ad` — disparador posterior a DELETE sobre `tb_buyer_orders`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_carts_ai` — disparador posterior a INSERT sobre `tb_carts`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_carts_au` — disparador posterior a UPDATE sobre `tb_carts`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_carts_ad` — disparador posterior a DELETE sobre `tb_carts`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbc_categories_after_insert` — disparador posterior a INSERT sobre `tbc_categories`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbc_categories_after_update` — disparador posterior a UPDATE sobre `tbc_categories`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbc_categories_after_delete` — disparador posterior a DELETE sobre `tbc_categories`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_product_categories_after_insert` — disparador posterior a INSERT sobre `tb_product_categories`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_product_categories_after_update` — disparador posterior a UPDATE sobre `tb_product_categories`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_product_categories_after_delete` — disparador posterior a DELETE sobre `tb_product_categories`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_products_after_insert` — disparador posterior a INSERT sobre `tb_products`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_products_after_update` — disparador posterior a UPDATE sobre `tb_products`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tb_products_after_delete` — disparador posterior a DELETE sobre `tb_products`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_users_after_insert` — disparador posterior a INSERT sobre `users`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_users_after_update` — disparador posterior a UPDATE sobre `users`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_users_after_delete` — disparador posterior a DELETE sobre `users`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbc_payment_methods_types_ai` — disparador posterior a INSERT sobre `tbc_payment_methods_types`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbc_payment_methods_types_au` — disparador posterior a UPDATE sobre `tbc_payment_methods_types`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbc_payment_methods_types_ad` — disparador posterior a DELETE sobre `tbc_payment_methods_types`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_carts_items_ai` — disparador posterior a INSERT sobre `tbd_carts_items`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_carts_items_au` — disparador posterior a UPDATE sobre `tbd_carts_items`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_carts_items_ad` — disparador posterior a DELETE sobre `tbd_carts_items`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_order_items_ai` — disparador posterior a INSERT sobre `tbd_order_items`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_order_items_au` — disparador posterior a UPDATE sobre `tbd_order_items`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_order_items_ad` — disparador posterior a DELETE sobre `tbd_order_items`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_products_users_providers_ai` — disparador posterior a INSERT sobre `tbd_products_users_providers`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_products_users_providers_au` — disparador posterior a UPDATE sobre `tbd_products_users_providers`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_products_users_providers_ad` — disparador posterior a DELETE sobre `tbd_products_users_providers`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_user_payment_methods_ai` — disparador posterior a INSERT sobre `tbd_user_payment_methods`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_user_payment_methods_au` — disparador posterior a UPDATE sobre `tbd_user_payment_methods`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_user_payment_methods_ad` — disparador posterior a DELETE sobre `tbd_user_payment_methods`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_users_wishlist_products_ai` — disparador posterior a INSERT sobre `tbd_users_wishlist_products`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_users_wishlist_products_au` — disparador posterior a UPDATE sobre `tbd_users_wishlist_products`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
-- `trg_tbd_users_wishlist_products_ad` — disparador posterior a DELETE sobre `tbd_users_wishlist_products`; registra el evento en `tb_logs`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.
+- `trg_tb_buyer_orders_ai` — se ejecuta AFTER INSERT sobre `tb_buyer_orders`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tb_buyer_orders_au` — se ejecuta AFTER UPDATE sobre `tb_buyer_orders`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tb_buyer_orders_ad` — se ejecuta AFTER DELETE sobre `tb_buyer_orders`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tb_carts_ai` — se ejecuta AFTER INSERT sobre `tb_carts`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tb_carts_au` — se ejecuta AFTER UPDATE sobre `tb_carts`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tb_carts_ad` — se ejecuta AFTER DELETE sobre `tb_carts`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbc_categories_after_insert` — se ejecuta AFTER INSERT sobre `tb_categories`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbc_categories_after_update` — se ejecuta AFTER UPDATE sobre `tb_categories`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tbc_categories_after_delete` — se ejecuta AFTER DELETE sobre `tb_categories`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tb_product_categories_after_insert` — se ejecuta AFTER INSERT sobre `tb_product_categories`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tb_product_categories_after_update` — se ejecuta AFTER UPDATE sobre `tb_product_categories`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tb_product_categories_after_delete` — se ejecuta AFTER DELETE sobre `tb_product_categories`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tb_products_after_insert` — se ejecuta AFTER INSERT sobre `tb_products`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tb_products_after_update` — se ejecuta AFTER UPDATE sobre `tb_products`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tb_products_after_delete` — se ejecuta AFTER DELETE sobre `tb_products`; inserta un registro en `tb_logs` para auditoría.
+- `trg_users_after_insert` — se ejecuta AFTER INSERT sobre `tb_users`; inserta un registro en `tb_logs` para auditoría.
+- `trg_users_after_update` — se ejecuta AFTER UPDATE sobre `tb_users`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_users_after_delete` — se ejecuta AFTER DELETE sobre `tb_users`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbc_payment_methods_types_ai` — se ejecuta AFTER INSERT sobre `tbc_payment_methods_types`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbc_payment_methods_types_au` — se ejecuta AFTER UPDATE sobre `tbc_payment_methods_types`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tbc_payment_methods_types_ad` — se ejecuta AFTER DELETE sobre `tbc_payment_methods_types`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_carts_items_ai` — se ejecuta AFTER INSERT sobre `tbd_carts_items`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_carts_items_au` — se ejecuta AFTER UPDATE sobre `tbd_carts_items`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tbd_carts_items_ad` — se ejecuta AFTER DELETE sobre `tbd_carts_items`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_order_items_ai` — se ejecuta AFTER INSERT sobre `tbd_order_items`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_order_items_au` — se ejecuta AFTER UPDATE sobre `tbd_order_items`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tbd_order_items_ad` — se ejecuta AFTER DELETE sobre `tbd_order_items`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_products_users_providers_ai` — se ejecuta AFTER INSERT sobre `tbd_products_users_providers`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_products_users_providers_au` — se ejecuta AFTER UPDATE sobre `tbd_products_users_providers`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tbd_products_users_providers_ad` — se ejecuta AFTER DELETE sobre `tbd_products_users_providers`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_user_payment_methods_ai` — se ejecuta AFTER INSERT sobre `tbd_user_payment_methods`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_user_payment_methods_au` — se ejecuta AFTER UPDATE sobre `tbd_user_payment_methods`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tbd_user_payment_methods_ad` — se ejecuta AFTER DELETE sobre `tbd_user_payment_methods`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_users_wishlist_products_ai` — se ejecuta AFTER INSERT sobre `tbd_users_wishlist_products`; inserta un registro en `tb_logs` para auditoría.
+- `trg_tbd_users_wishlist_products_au` — se ejecuta AFTER UPDATE sobre `tbd_users_wishlist_products`; inserta un registro en `tb_logs` para auditoría. El cuerpo compara o registra los valores modificados según la tabla.
+- `trg_tbd_users_wishlist_products_ad` — se ejecuta AFTER DELETE sobre `tbd_users_wishlist_products`; inserta un registro en `tb_logs` para auditoría.
 
 ## Notas de integridad y alcance
 

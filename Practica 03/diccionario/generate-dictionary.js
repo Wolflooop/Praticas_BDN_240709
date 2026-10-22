@@ -5,7 +5,10 @@ const path = require('node:path');
 const { parse } = require('../eer/sql-parser.js');
 
 const root = path.resolve(__dirname, '..');
-const dump = path.join(root, 'backups', 'respaldo_21_10_2026_DGC.sql');
+const originalDump = path.join(root, 'backups', 'respaldo_21_10_2026_DGC.sql');
+const sanitizedDump = path.join(root, 'backups', 'respaldo_21_10_2026_DGC_sanitizado.sql');
+const dump = fs.existsSync(originalDump) ? originalDump : sanitizedDump;
+if (!fs.existsSync(dump)) throw new Error('No se encontró el respaldo original ni la copia sanitizada.');
 const sql = fs.readFileSync(dump, 'latin1');
 const model = parse(sql);
 const lines = sql.split(/\r?\n/);
@@ -62,6 +65,7 @@ function example(c) {
   if(/int/.test(c.type)) return '3 (ilustrativo)';
   if(/email/.test(c.name)) return 'persona@example.invalid';
   if(/password/i.test(c.name)) return '[valor omitido]';
+  if(c.name==='last_four') return '0427 (ficticio; cuatro dígitos)';
   return '«texto de ejemplo»';
 }
 const relationsByTable = new Map();
@@ -71,13 +75,13 @@ md.push('# Diccionario de datos — db_test_7b','',
   '> Fuente de esquema: `backups/respaldo_21_10_2026_DGC.sql` (MySQL 8.4.9, InnoDB, utf8mb4). El dump se analizó como texto; no se ejecutó ni se consultó una instancia. Este documento describe la definición incluida en ese respaldo, no el estado actual de un servidor. PostgreSQL no aparece en las fuentes inspeccionadas.','',
   '## Cómo leerlo','',
   'El tipo SQL describe almacenamiento; la clasificación describe la naturaleza conceptual del dato. Los ejemplos son ficticios y sirven solo para ilustrar el formato. Las descripciones marcadas como inferidas se deducen del nombre y la estructura, no de una especificación funcional. La ausencia de una FK significa que el dump no declara esa restricción.','',
-  `## Resumen del respaldo\n\n- Motor y versión declarados: MySQL 8.4.9\n- Base: \`${model.tables[0]?.schema}\`\n- Tablas: ${model.tables.length}; columnas: ${model.tables.reduce((n,t)=>n+t.columns.length,0)}; FK: ${model.relations.length}\n- Vistas: ${model.objects.views.length}; procedimientos: ${model.objects.procedures.length}; funciones: ${model.objects.functions.length}; triggers: ${model.objects.triggers.length}\n- Conexión activa: no configurada. El dump no acredita que este sea el estado vigente de un servidor.`,
-  '', '## Relaciones','', ...model.relations.map(r=>`- \`${r.fromTable}.${r.fromColumns.join(', ')}\` → \`${r.toTable}.${r.toColumns.join(', ')}\` (restricción \`${r.name}\`).`),'',
+  `## Resumen del respaldo\n\n- Motor y versión declarados: MySQL 8.4.9\n- Base: \`${model.tables[0]?.schema}\`\n- Tablas: ${model.tables.length}; columnas: ${model.tables.reduce((n,t)=>n+t.columns.length,0)}; FK: ${model.relations.length}\n- Vistas: ${model.objects.views.length}; procedimientos: ${model.objects.procedures.length}; funciones: ${model.objects.functions.length}; triggers: ${model.objects.triggers.length}\n- El DDL no declara restricciones CHECK.\n- Conexión activa: no configurada. El dump no acredita que este sea el estado vigente de un servidor.`,
+  '', '## Relaciones','', ...model.relations.map(r=>`- \`${r.fromTable}.${r.fromColumns.join(', ')}\` → \`${r.toTable}.${r.toColumns.join(', ')}\` (restricción \`${r.name}\`; cardinalidad ${r.cardinality}; opcionalidad en origen: ${r.optional?'sí':'no'}).`),'',
   '## Diccionario de tablas','');
 for(const t of model.tables) {
   const [label,desc]=tableInfo[t.name]||[es(t.name),`Propósito inferido a partir de la estructura de columnas y relaciones de \`${t.name}\`.`];
   const start=lines.findIndex(x=>x.includes(`CREATE TABLE \`${t.name}\``))+1;
-  const fks=t.foreignKeys.map(f=>`${f.name}: ${f.columns.join(', ')} → ${f.references.table}.${f.references.columns.join(', ')}`).join('; ')||'No hay claves foráneas declaradas.';
+  const fks=t.foreignKeys.map(f=>`${f.name}: ${f.columns.join(', ')} → ${f.references.table}.${f.references.columns.join(', ')}; ON DELETE ${f.onDelete||'no especificado explícitamente'}; ON UPDATE ${f.onUpdate||'no especificado explícitamente'}`).join('; ')||'No hay claves foráneas declaradas.';
   const indexes=t.indexes.map(i=>`${i.name} (${i.type}): ${i.columns.join(', ')}`).join('; ')||'No se identificaron índices.';
   md.push(`### ${t.name} — ${label}`,'',desc,'',
     `**Motor:** ${t.engine||'no indicado'} · **Clave primaria:** ${t.indexes.find(i=>i.type==='PRIMARY KEY')?.columns.join(', ')||'no declarada'} · **Claves foráneas:** ${fks}`,'',
@@ -100,19 +104,27 @@ md.push('## Vistas','',...model.objects.views.map(v=>`- \`${v}\` — vista decla
   '## Procedimientos almacenados','',...model.objects.procedures.map(p=>`- \`${p}\` — procedimiento declarado en el respaldo. Revise su cuerpo SQL antes de invocarlo para conocer efectos y parámetros.`),'',
   '## Funciones almacenadas','',model.objects.functions.length?model.objects.functions.map(f=>`- \`${f}\``):'No se encontraron funciones almacenadas en este respaldo.','',
   '## Disparadores (triggers)','',...model.objects.triggers.map(x=>{
-    const match=x.match(/^(?:trg_)?(.+?)(?:_after_(insert|update|delete)|_(ai|au|ad))$/i);
-    const event=({insert:'INSERT',update:'UPDATE',delete:'DELETE',ai:'INSERT',au:'UPDATE',ad:'DELETE'})[match?.[2]||match?.[3]];
-    const target=match?.[1]||'la tabla indicada por el nombre';
-    return `- \`${x}\` — disparador posterior a ${event||'un evento de escritura'} sobre \`${target}\`; registra el evento en \`tb_logs\`. Los disparadores de actualización comparan valores anteriores y nuevos o registran la actualización según el cuerpo SQL. La bitácora puede ser escrita de forma distinta por evento; consulte el SQL para sus campos exactos.`;
+    const escaped=x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const re=new RegExp('TRIGGER\\s+\\x60'+escaped+'\\x60\\s+(AFTER|BEFORE)\\s+(INSERT|UPDATE|DELETE)\\s+ON\\s+\\x60([^\\x60]+)\\x60','i');
+    const match=sql.match(re);
+    const bodyStart=match?sql.indexOf(match[0])+match[0].length:0;
+    const bodyEnd=sql.indexOf('END */;;',bodyStart);
+    const body=sql.slice(bodyStart,bodyEnd>bodyStart?bodyEnd:bodyStart+5000);
+    return `- \`${x}\` — se ejecuta ${match?.[1]||'AFTER'} ${match?.[2]||'un evento de escritura'} sobre \`${match?.[3]||'tabla no resuelta'}\`; ${/INSERT\s+INTO\s+tb_logs/i.test(body)?'inserta un registro en `tb_logs` para auditoría.': 'su efecto se define en el cuerpo del trigger incluido en el respaldo.'} ${match?.[2]==='UPDATE'?'El cuerpo compara o registra los valores modificados según la tabla.':''}`;
   }),'',
   '## Notas de integridad y alcance','',
   '- Se documentan PK, FK, índices, nulabilidad, valores predeterminados y atributos reconocidos en el DDL del respaldo. No se añaden reglas de negocio no expresadas en SQL.\n- La tabla `tb_logs` no tiene FK declaradas hacia los registros que describe; `table_name` y `record_id` son referencias de auditoría, no integridad referencial.\n- Los valores insertados y sus conteos no se reproducen aquí para evitar convertir datos de respaldo en ejemplos ni presentarlos como vigentes.\n- El respaldo exacto solicitado no está incluido en el commit inspeccionado (archivo sin seguimiento al momento del análisis); por ello el ERD generado no afirma que este dump sea la versión publicada en GitHub.');
 fs.writeFileSync(path.join(__dirname,'DICCIONARIO.md'),md.join('\n'),'utf8');
 
 const ids=new Map(model.tables.map(t=>[t.name, t.name.replace(/[^a-zA-Z0-9_-]/g,'_')]));
-const domains={tb_buyer_orders:'órdenes',tb_carts:'compras',tb_categories:'catálogo',tb_logs:'auditoría',tb_product_categories:'catálogo',tb_products:'catálogo',tb_users:'cuentas',tbc_payment_methods_types:'pagos',tbd_carts_items:'compras',tbd_order_items:'órdenes',tbd_products_users_providers:'proveedores',tbd_user_payment_methods:'pagos',tbd_users_wishlist_products:'cuentas'};
-const entities=model.tables.map(t=>({id:ids.get(t.name),label:t.name,attributes:t.columns.map(c=>({name:c.name,type:c.type,...(c.pk||c.fk||c.unique?{key:[...(c.pk?['pk']:[]),...(c.fk?['fk']:[]),...(c.unique?['uk']:[])]}:{}),...(c.fk?{references:`${ids.get(c.references.table)}.${c.references.columns[t.foreignKeys.find(f=>f.columns.includes(c.name))?.columns.indexOf(c.name)||0]}`}:{})}))}));
+const positions={
+  tb_users:[0,0],tb_logs:[0,1],tb_products:[0,2],tbc_payment_methods_types:[0,3],tb_categories:[0,4],
+  tb_carts:[1,0],tb_buyer_orders:[1,1],tb_product_categories:[1,2],tbd_products_users_providers:[1,3],tbd_user_payment_methods:[1,4],
+  tbd_carts_items:[2,0],tbd_order_items:[2,1],tbd_users_wishlist_products:[2,2]
+};
+const widths={tb_buyer_orders:679,tb_logs:407,tbd_products_users_providers:439,tbd_user_payment_methods:283};
+const entities=model.tables.map(t=>({id:ids.get(t.name),label:t.name,row:positions[t.name][0],col:positions[t.name][1],...(widths[t.name]?{width:widths[t.name]}:{}),attributes:t.columns.map(c=>({name:c.name,type:c.type,...(c.pk||c.fk||c.unique?{key:[...(c.pk?['pk']:[]),...(c.fk?['fk']:[]),...(c.unique?['uk']:[])]}:{}),...(c.fk?{references:`${ids.get(c.references.table)}.${c.references.columns[t.foreignKeys.find(f=>f.columns.includes(c.name))?.columns.indexOf(c.name)||0]}`}:{})}))}));
 // No domain tags: the repository tables serve overlapping roles and the ERD remains purely structural.
-const candidate={schema_version:1,diagram_type:'erd',meta:{title:'Diccionario de datos: db_test_7b',locale:'es',output:'diccionario-erd.html',quality_profile:'standard'},entities,relationships:model.relations.map(r=>({id:r.name.replace(/[^a-zA-Z0-9_-]/g,'_'),from:ids.get(r.fromTable),to:ids.get(r.toTable),label:r.name,fromCardinality:'many',toCardinality:'one',...(r.fromColumns.some(c=>{const t=model.tables.find(x=>x.name===r.fromTable);return t.columns.find(y=>y.name===c)?.nullable})?{fromOptional:true}:{})}))};
+const candidate={schema_version:1,diagram_type:'erd',meta:{title:'Diccionario de datos: db_test_7b',locale:'es',output:'diccionario-erd.html',quality_profile:'standard'},layout:{mode:'grid',gapX:44,gapY:42},entities,relationships:model.relations.filter(r=>r.fromTable!==r.toTable).map(r=>({id:r.name.replace(/[^a-zA-Z0-9_-]/g,'_'),from:ids.get(r.fromTable),to:ids.get(r.toTable),label:r.name,fromCardinality:r.cardinality==='1:1'?'one':'many',toCardinality:'one',identifying:r.fromColumns.every(c=>model.tables.find(t=>t.name===r.fromTable).columns.find(x=>x.name===c)?.pk),...(r.fromColumns.every(c=>model.tables.find(t=>t.name===r.fromTable).columns.find(x=>x.name===c)?.pk)?{}:{variant:'dashed'}),...(r.optional?{fromOptional:true}:{})})),cards:[{dot:'amber',title:'Autorrelación de categorías',items:['tb_categories.sup_id_category es una FK opcional a tb_categories.ID. Se conserva como referencia en la fila de columna; este ERD la explica aquí porque Archify no admite relaciones visuales de una entidad consigo misma.']}]};
 fs.writeFileSync(path.join(__dirname,'candidate.json'),JSON.stringify(candidate,null,2)+'\n','utf8');
 console.log(`Generado desde ${path.basename(dump)}: ${model.tables.length} tablas, ${model.tables.reduce((n,t)=>n+t.columns.length,0)} columnas, ${model.relations.length} FK.`);

@@ -7,10 +7,18 @@
     "output": "diccionario-erd.html",
     "quality_profile": "standard"
   },
+  "layout": {
+    "mode": "grid",
+    "gapX": 44,
+    "gapY": 42
+  },
   "entities": [
     {
       "id": "tb_buyer_orders",
       "label": "tb_buyer_orders",
+      "row": 1,
+      "col": 1,
+      "width": 679,
       "attributes": [
         {
           "name": "ID",
@@ -56,6 +64,8 @@
     {
       "id": "tb_carts",
       "label": "tb_carts",
+      "row": 1,
+      "col": 0,
       "attributes": [
         {
           "name": "ID",
@@ -90,6 +100,8 @@
     {
       "id": "tb_categories",
       "label": "tb_categories",
+      "row": 0,
+      "col": 4,
       "attributes": [
         {
           "name": "ID",
@@ -134,6 +146,9 @@
     {
       "id": "tb_logs",
       "label": "tb_logs",
+      "row": 0,
+      "col": 1,
+      "width": 407,
       "attributes": [
         {
           "name": "ID",
@@ -175,6 +190,8 @@
     {
       "id": "tb_product_categories",
       "label": "tb_product_categories",
+      "row": 1,
+      "col": 2,
       "attributes": [
         {
           "name": "product_Id",
@@ -211,6 +228,8 @@
     {
       "id": "tb_products",
       "label": "tb_products",
+      "row": 0,
+      "col": 2,
       "attributes": [
         {
           "name": "ID",
@@ -259,6 +278,8 @@
     {
       "id": "tb_users",
       "label": "tb_users",
+      "row": 0,
+      "col": 0,
       "attributes": [
         {
           "name": "ID",
@@ -306,6 +327,8 @@
     {
       "id": "tbc_payment_methods_types",
       "label": "tbc_payment_methods_types",
+      "row": 0,
+      "col": 3,
       "attributes": [
         {
           "name": "ID",
@@ -342,6 +365,8 @@
     {
       "id": "tbd_carts_items",
       "label": "tbd_carts_items",
+      "row": 2,
+      "col": 0,
       "attributes": [
         {
           "name": "cart_ID",
@@ -383,6 +408,8 @@
     {
       "id": "tbd_order_items",
       "label": "tbd_order_items",
+      "row": 2,
+      "col": 1,
       "attributes": [
         {
           "name": "ID",
@@ -440,6 +467,9 @@
     {
       "id": "tbd_products_users_providers",
       "label": "tbd_products_users_providers",
+      "row": 1,
+      "col": 3,
+      "width": 439,
       "attributes": [
         {
           "name": "user_ID",
@@ -486,6 +516,9 @@
     {
       "id": "tbd_user_payment_methods",
       "label": "tbd_user_payment_methods",
+      "row": 1,
+      "col": 4,
+      "width": 283,
       "attributes": [
         {
           "name": "ID",
@@ -553,6 +586,8 @@
     {
       "id": "tbd_users_wishlist_products",
       "label": "tbd_users_wishlist_products",
+      "row": 2,
+      "col": 2,
       "attributes": [
         {
           "name": "user_ID",
@@ -594,24 +629,19 @@
       "to": "tb_users",
       "label": "tb_buyer_orders_ibfk_1",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": false,
+      "variant": "dashed"
     },
     {
       "id": "tb_carts_ibfk_1",
       "from": "tb_carts",
       "to": "tb_users",
       "label": "tb_carts_ibfk_1",
-      "fromCardinality": "many",
-      "toCardinality": "one"
-    },
-    {
-      "id": "fk_superior_category",
-      "from": "tb_categories",
-      "to": "tb_categories",
-      "label": "fk_superior_category",
-      "fromCardinality": "many",
+      "fromCardinality": "one",
       "toCardinality": "one",
-      "fromOptional": true
+      "identifying": false,
+      "variant": "dashed"
     },
     {
       "id": "fk_pc_category",
@@ -619,7 +649,8 @@
       "to": "tb_categories",
       "label": "fk_pc_category",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
     },
     {
       "id": "fk_pc_product",
@@ -627,7 +658,8 @@
       "to": "tb_products",
       "label": "fk_pc_product",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
     },
     {
       "id": "fk_cart_items_cart",
@@ -635,7 +667,8 @@
       "to": "tb_carts",
       "label": "fk_cart_items_cart",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
     },
     {
       "id": "fk_cart_items_provider_product",
@@ -643,7 +676,8 @@
       "to": "tbd_products_users_providers",
       "label": "fk_cart_items_provider_product",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
     },
     {
       "id": "tbd_order_items_ibfk_1",
@@ -651,7 +685,9 @@
       "to": "tb_buyer_orders",
       "label": "tbd_order_items_ibfk_1",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": false,
+      "variant": "dashed"
     },
     {
       "id": "tbd_order_items_ibfk_2",
@@ -659,7 +695,9 @@
       "to": "tbd_products_users_providers",
       "label": "tbd_order_items_ibfk_2",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": false,
+      "variant": "dashed"
     },
     {
       "id": "fk_products2",
@@ -667,7 +705,8 @@
       "to": "tb_products",
       "label": "fk_products2",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
     },
     {
       "id": "fk_user1",
@@ -675,7 +714,8 @@
       "to": "tb_users",
       "label": "fk_user1",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
     },
     {
       "id": "tbd_user_payment_methods_ibfk_1",
@@ -683,7 +723,9 @@
       "to": "tb_users",
       "label": "tbd_user_payment_methods_ibfk_1",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": false,
+      "variant": "dashed"
     },
     {
       "id": "tbd_user_payment_methods_ibfk_2",
@@ -691,7 +733,9 @@
       "to": "tbc_payment_methods_types",
       "label": "tbd_user_payment_methods_ibfk_2",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": false,
+      "variant": "dashed"
     },
     {
       "id": "fk_products3",
@@ -699,7 +743,8 @@
       "to": "tb_products",
       "label": "fk_products3",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
     },
     {
       "id": "fk_user2",
@@ -707,7 +752,17 @@
       "to": "tb_users",
       "label": "fk_user2",
       "fromCardinality": "many",
-      "toCardinality": "one"
+      "toCardinality": "one",
+      "identifying": true
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Autorrelación de categorías",
+      "items": [
+        "tb_categories.sup_id_category es una FK opcional a tb_categories.ID. Se conserva como referencia en la fila de columna; este ERD la explica aquí porque Archify no admite relaciones visuales de una entidad consigo misma."
+      ]
     }
   ]
 }
