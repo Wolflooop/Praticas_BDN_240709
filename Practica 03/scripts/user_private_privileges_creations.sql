@@ -28,6 +28,13 @@ IDENTIFIED BY '240272';
 CREATE USER IF NOT EXISTS 'John'@'%'
 IDENTIFIED BY '240080';
 
+-- USERS MIDDLEWARE (Faltaban)
+CREATE USER IF NOT EXISTS 'app_web'@'%'
+IDENTIFIED BY 'web123';
+
+CREATE USER IF NOT EXISTS 'app_mobile'@'%'
+IDENTIFIED BY 'mobile890';
+
 
 -- ============================================================
 -- CREACIÓN DE ROLES
@@ -80,7 +87,7 @@ TO 'buyer';
 
 
 -- ============================================================
--- PRIVILEGIOS DE SUPPORT
+-- PRIVILEGIOS DE SUPPORT (Actualizado con nuevas tablas)
 -- ============================================================
 
 GRANT SELECT, INSERT, UPDATE
@@ -88,7 +95,15 @@ ON db_test_7b.tb_users
 TO 'support';
 
 GRANT SELECT, INSERT, UPDATE
-ON db_test_7b.tb_categories
+ON db_test_7b.tb_people
+TO 'support';
+
+GRANT SELECT, INSERT, UPDATE
+ON db_test_7b.tb_user_addresses
+TO 'support';
+
+GRANT SELECT, INSERT, UPDATE
+ON db_test_7b.tbc_categories
 TO 'support';
 
 GRANT SELECT, INSERT, UPDATE
@@ -106,11 +121,16 @@ TO 'common_user';
 
 
 -- ============================================================
--- PRIVILEGIOS DE USER_NOT_REGISTERED
+-- PRIVILEGIOS DE USER_NOT_REGISTERED (Actualizado con el SP)
 -- ============================================================
 
 GRANT SELECT
 ON db_test_7b.tb_products
+TO 'user_not_registered';
+
+-- Permiso indispensable para ejecutar el Stored Procedure de registro que creamos
+GRANT EXECUTE 
+ON PROCEDURE db_test_7b.sp_register_new_user 
 TO 'user_not_registered';
 
 
@@ -142,6 +162,13 @@ TO 'Josue.Oloarte'@'%';
 GRANT 'user_not_registered'
 TO 'John'@'%';
 
+-- Asignar roles a las apps de middleware
+GRANT 'user_not_registered'
+TO 'app_web'@'%';
+
+GRANT 'user_not_registered'
+TO 'app_mobile'@'%';
+
 
 -- ============================================================
 -- ESTABLECER ROLES PREDETERMINADOS
@@ -171,26 +198,32 @@ TO 'Josue.Oloarte'@'%';
 SET DEFAULT ROLE 'user_not_registered'
 TO 'John'@'%';
 
+SET DEFAULT ROLE 'user_not_registered'
+TO 'app_web'@'%';
+
+SET DEFAULT ROLE 'user_not_registered'
+TO 'app_mobile'@'%';
+
+
+-- ============================================================
+-- APLICAR CAMBIOS DE PRIVILEGIOS
+-- ============================================================
+FLUSH PRIVILEGES;
+
 
 -- ============================================================
 -- VERIFICACIÓN DE PRIVILEGIOS DE LOS USUARIOS
 -- ============================================================
 
 SHOW GRANTS FOR 'Diego.Garrido'@'%';
-
 SHOW GRANTS FOR 'marco.ramirez'@'%';
-
 SHOW GRANTS FOR 'Marianna.Mayte'@'%';
-
 SHOW GRANTS FOR 'Jeysi.Damari'@'%';
-
 SHOW GRANTS FOR 'Josue.Oloarte'@'%';
-
 SHOW GRANTS FOR 'Rodolfo.cs'@'%';
-
 SHOW GRANTS FOR 'Victor.Manuel'@'%';
-
 SHOW GRANTS FOR 'John'@'%';
+SHOW GRANTS FOR 'app_web'@'%';
 
 
 -- ============================================================
@@ -198,17 +231,11 @@ SHOW GRANTS FOR 'John'@'%';
 -- ============================================================
 
 SHOW GRANTS FOR 'super_admin';
-
 SHOW GRANTS FOR 'admin';
-
 SHOW GRANTS FOR 'seller';
-
 SHOW GRANTS FOR 'buyer';
-
 SHOW GRANTS FOR 'support';
-
 SHOW GRANTS FOR 'common_user';
-
 SHOW GRANTS FOR 'user_not_registered';
 
 
@@ -228,5 +255,5 @@ FROM mysql.role_edges;
 -- ============================================================
 
 SELECT
-    'Los usuarios, roles y privilegios han sido creados correctamente'
+    'Los usuarios, roles y privilegios han sido creados correctamente con soporte para SP y Middleware'
     AS mensaje;
