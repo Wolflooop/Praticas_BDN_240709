@@ -1,0 +1,5569 @@
+{
+  "database": "db_test_7b",
+  "mysqlVersion": "8.4.9",
+  "source": "backups/respaldo_29_10_2026_DGC.sql",
+  "generatedAt": "2026-10-30",
+  "tables": [
+    {
+      "name": "tb_carts",
+      "title": "Carritos de compra",
+      "description": "Mantiene el carrito asociado a una cuenta. La restricción única sobre user_ID limita a una fila de carrito por usuario.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "user_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la cuenta de usuario relacionada.",
+          "keys": [
+            "UNIQUE",
+            "FK"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) DEFAULT b'1'",
+          "nullable": true,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "uk_cart_user",
+          "columns": [
+            "user_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "user_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "tb_carts_ibfk_1",
+          "columns": [
+            "user_ID"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_logs",
+      "title": "Bitácora de operaciones",
+      "description": "Conserva eventos de operaciones sobre tablas, con actor de base de datos, registro afectado, descripción, fecha y estado. El respaldo no declara una FK desde record_id porque la bitácora es polimórfica.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "table_name",
+          "type": "varchar(80)",
+          "size": "80",
+          "definition": "varchar(80) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre de la tabla afectada, almacenado como texto.",
+          "keys": []
+        },
+        {
+          "name": "record_id",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador del registro afectado; no tiene FK declarada.",
+          "keys": []
+        },
+        {
+          "name": "table_operation",
+          "type": "enum('Create','Read','Update','Delete')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Create','Read','Update','Delete') DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Categoría de operación registrada.",
+          "keys": []
+        },
+        {
+          "name": "db_user",
+          "type": "varchar(80)",
+          "size": "80",
+          "definition": "varchar(80) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre del usuario de base de datos que ejecutó la operación.",
+          "keys": []
+        },
+        {
+          "name": "table_description",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Descripción textual del evento registrado.",
+          "keys": []
+        },
+        {
+          "name": "operation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de la operación registrada.",
+          "keys": []
+        },
+        {
+          "name": "operation_status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) DEFAULT b'1'",
+          "nullable": true,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador del resultado o estado de la operación.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "idx_logs_table_record_operation",
+          "columns": [
+            "table_name",
+            "record_id",
+            "table_operation"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "idx_logs_table_operation_date",
+          "columns": [
+            "table_name",
+            "table_operation",
+            "operation_date"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "idx_logs_db_user_date",
+          "columns": [
+            "db_user",
+            "operation_date"
+          ]
+        }
+      ],
+      "constraints": [],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=28062 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_order_cancellations",
+      "title": "Solicitudes de cancelación de pedido",
+      "description": "Registra solicitudes asociadas a un pedido, con usuario solicitante, motivo, estado y fechas. Sus claves foráneas declaradas apuntan al pedido y a la cuenta solicitante.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "order_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pedido relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "requested_by",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del usuario que solicita la operación.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Motivo textual de la solicitud.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "enum('Requested','Approved','Rejected','Completed')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Requested','Approved','Rejected','Completed') NOT NULL DEFAULT 'Requested'",
+          "nullable": false,
+          "default": "'Requested'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Estado categórico del registro; los valores permitidos son los enumerados en la definición ENUM de SQL.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_order_cancellations_order",
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_order_cancellations_user",
+          "columns": [
+            "requested_by"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "requested_by"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_order_cancellations_order",
+          "columns": [
+            "order_ID"
+          ],
+          "references": {
+            "table": "tb_orders",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_order_cancellations_user",
+          "columns": [
+            "requested_by"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_orders",
+      "title": "Pedidos",
+      "description": "Registra pedidos por vendedor, subtotal, costo de envío, estado de cumplimiento y marcas temporales.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "seller_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la cuenta vendedora del pedido.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "subtotal",
+          "type": "decimal(12,2)",
+          "size": "12,2",
+          "definition": "decimal(12,2) NOT NULL DEFAULT '0.00'",
+          "nullable": false,
+          "default": "'0.00'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Importe subtotal; cuando es generado, el SQL define la expresión que lo calcula.",
+          "keys": []
+        },
+        {
+          "name": "shipping_cost",
+          "type": "decimal(12,2)",
+          "size": "12,2",
+          "definition": "decimal(12,2) NOT NULL DEFAULT '0.00'",
+          "nullable": false,
+          "default": "'0.00'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Importe del costo de envío.",
+          "keys": []
+        },
+        {
+          "name": "fulfillment_status",
+          "type": "enum('Pending','Accepted','Preparing','Sent','Delivered','Canceled','Returned')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Pending','Accepted','Preparing','Sent','Delivered','Canceled','Returned') NOT NULL DEFAULT 'Pending'",
+          "nullable": false,
+          "default": "'Pending'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Estado del proceso de cumplimiento; los valores permitidos aparecen en el ENUM SQL.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "seller_ID",
+          "columns": [
+            "seller_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "seller_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "tb_orders_ibfk_1",
+          "columns": [
+            "seller_ID"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "CHECK",
+          "name": "tb_orders_chk_1",
+          "expression": "(`subtotal` >= 0)"
+        },
+        {
+          "type": "CHECK",
+          "name": "tb_orders_chk_2",
+          "expression": "(`shipping_cost` >= 0)"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_payment_methods",
+      "title": "Métodos de pago",
+      "description": "Catálogo de métodos de pago con nombre, descripción, estado y fecha de creación. No hay una FK declarada hacia este catálogo en el respaldo.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "varchar(100)",
+          "size": "100",
+          "definition": "varchar(100) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre visible del elemento.",
+          "keys": []
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text",
+          "nullable": true,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Descripción textual del elemento.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        }
+      ],
+      "constraints": [],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_payment_transaction",
+      "title": "Transacciones de pago",
+      "description": "Almacena referencias y respuestas del gateway asociadas a un pago.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "payment_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pago relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "transaction_reference",
+          "type": "varchar(255)",
+          "size": "255",
+          "definition": "varchar(255) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Referencia de la transacción en el sistema externo.",
+          "keys": []
+        },
+        {
+          "name": "gateway_response",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text",
+          "nullable": true,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Respuesta textual del gateway de pago.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_trans_payment",
+          "columns": [
+            "payment_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "payment_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_trans_payment",
+          "columns": [
+            "payment_ID"
+          ],
+          "references": {
+            "table": "tb_payments",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_payments",
+      "title": "Pagos",
+      "description": "Registra el importe y estado de pago de un pedido, además del método de pago del usuario cuando se especifica.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "order_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pedido relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "user_payment_method_ID",
+          "type": "bigint unsigned",
+          "size": "No aplica",
+          "definition": "bigint unsigned DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del método de pago del usuario; puede no estar especificado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "amount",
+          "type": "decimal(12,2)",
+          "size": "12,2",
+          "definition": "decimal(12,2) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Importe del pago o reembolso.",
+          "keys": []
+        },
+        {
+          "name": "payment_status",
+          "type": "enum('Pending','Approved','Rejected','Refunded')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Pending','Approved','Rejected','Refunded') NOT NULL DEFAULT 'Pending'",
+          "nullable": false,
+          "default": "'Pending'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Categoría del estado del pago.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_payments_order",
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_payments_user_method",
+          "columns": [
+            "user_payment_method_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "user_payment_method_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_payments_order",
+          "columns": [
+            "order_ID"
+          ],
+          "references": {
+            "table": "tb_orders",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_payments_user_method",
+          "columns": [
+            "user_payment_method_ID"
+          ],
+          "references": {
+            "table": "tbd_user_payment_methods",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_people",
+      "title": "Personas",
+      "description": "Almacena datos personales y de contacto; user_ID opcional y único vincula como máximo una fila de persona por usuario.",
+      "columns": [
+        {
+          "name": "person_ID",
+          "type": "bigint unsigned",
+          "size": "No aplica",
+          "definition": "bigint unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila de persona.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "user_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la cuenta de usuario relacionada.",
+          "keys": [
+            "UNIQUE",
+            "FK"
+          ]
+        },
+        {
+          "name": "courtesy_title",
+          "type": "varchar(20)",
+          "size": "20",
+          "definition": "varchar(20) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Tratamiento de cortesía textual.",
+          "keys": []
+        },
+        {
+          "name": "given_names",
+          "type": "varchar(150)",
+          "size": "150",
+          "definition": "varchar(150) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombres de la persona.",
+          "keys": []
+        },
+        {
+          "name": "family_names",
+          "type": "varchar(150)",
+          "size": "150",
+          "definition": "varchar(150) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Apellidos de la persona.",
+          "keys": []
+        },
+        {
+          "name": "birth_date",
+          "type": "date",
+          "size": "No aplica",
+          "definition": "date DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha de nacimiento.",
+          "keys": []
+        },
+        {
+          "name": "gender",
+          "type": "enum('Hombre','Mujer','Prefiero no decirlo')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Hombre','Mujer','Prefiero no decirlo') NOT NULL DEFAULT 'Prefiero no decirlo'",
+          "nullable": false,
+          "default": "'Prefiero no decirlo'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Categoría declarada de género; los valores permitidos aparecen en el ENUM SQL.",
+          "keys": []
+        },
+        {
+          "name": "country_code",
+          "type": "char(2)",
+          "size": "2",
+          "definition": "char(2) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Código de país almacenado en dos caracteres; el SQL no define un catálogo.",
+          "keys": []
+        },
+        {
+          "name": "phone",
+          "type": "varchar(25)",
+          "size": "25",
+          "definition": "varchar(25) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Número telefónico almacenado como texto.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) DEFAULT b'1'",
+          "nullable": true,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "person_ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "person_ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "user_ID",
+          "columns": [
+            "user_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "user_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_people_users",
+          "columns": [
+            "user_ID"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=7503 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_products",
+      "title": "Productos",
+      "description": "Catálogo de productos con SKU único, descripción, precio, inventario y estado.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "SKU",
+          "type": "varchar(50)",
+          "size": "50",
+          "definition": "varchar(50) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Código de referencia comercial del producto.",
+          "keys": [
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "varchar(250)",
+          "size": "250",
+          "definition": "varchar(250) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre visible del elemento.",
+          "keys": []
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text",
+          "nullable": true,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Descripción textual del elemento.",
+          "keys": []
+        },
+        {
+          "name": "current_price",
+          "type": "decimal(10,2)",
+          "size": "10,2",
+          "definition": "decimal(10,2) NOT NULL DEFAULT '0.00'",
+          "nullable": false,
+          "default": "'0.00'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Importe del precio vigente del producto.",
+          "keys": []
+        },
+        {
+          "name": "current_stock",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL DEFAULT '0'",
+          "nullable": false,
+          "default": "'0'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa discreta",
+          "description": "Cantidad de existencias registrada para el producto.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) DEFAULT b'1'",
+          "nullable": true,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "SKU",
+          "columns": [
+            "SKU"
+          ]
+        }
+      ],
+      "constraints": [],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=5011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_refunds",
+      "title": "Reembolsos",
+      "description": "Registra importes de reembolso, motivo y fecha para un pago.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "payment_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pago relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "amount",
+          "type": "decimal(12,2)",
+          "size": "12,2",
+          "definition": "decimal(12,2) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Importe del pago o reembolso.",
+          "keys": []
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text",
+          "nullable": true,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Motivo textual de la solicitud.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_refunds_payment",
+          "columns": [
+            "payment_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "payment_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_refunds_payment",
+          "columns": [
+            "payment_ID"
+          ],
+          "references": {
+            "table": "tb_payments",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_returns",
+      "title": "Solicitudes de devolución",
+      "description": "Registra solicitudes asociadas a un pedido, con usuario solicitante, motivo, estado y fechas. Sus claves foráneas declaradas apuntan al pedido y a la cuenta solicitante.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "order_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pedido relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "requested_by",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del usuario que solicita la operación.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Motivo textual de la solicitud.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "enum('Requested','Approved','Rejected','Completed')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Requested','Approved','Rejected','Completed') NOT NULL DEFAULT 'Requested'",
+          "nullable": false,
+          "default": "'Requested'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Estado categórico del registro; los valores permitidos son los enumerados en la definición ENUM de SQL.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_returns_order_hdr",
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_returns_user",
+          "columns": [
+            "requested_by"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "requested_by"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_returns_order_hdr",
+          "columns": [
+            "order_ID"
+          ],
+          "references": {
+            "table": "tb_orders",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_returns_user",
+          "columns": [
+            "requested_by"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_shipments",
+      "title": "Envíos",
+      "description": "Registra seguimiento, transportista, estado y fechas de despacho y entrega de un pedido.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "order_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pedido relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "tracking_number",
+          "type": "varchar(100)",
+          "size": "100",
+          "definition": "varchar(100) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Número de seguimiento del envío.",
+          "keys": []
+        },
+        {
+          "name": "carrier",
+          "type": "varchar(100)",
+          "size": "100",
+          "definition": "varchar(100) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre del transportista.",
+          "keys": []
+        },
+        {
+          "name": "shipping_status",
+          "type": "enum('Preparing','In_Transit','Delivered','Failed')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Preparing','In_Transit','Delivered','Failed') NOT NULL DEFAULT 'Preparing'",
+          "nullable": false,
+          "default": "'Preparing'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Categoría del estado del envío.",
+          "keys": []
+        },
+        {
+          "name": "shipped_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de despacho.",
+          "keys": []
+        },
+        {
+          "name": "delivered_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de entrega.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_shipments_order",
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "order_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_shipments_order",
+          "columns": [
+            "order_ID"
+          ],
+          "references": {
+            "table": "tb_orders",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_user_addresses",
+      "title": "Direcciones de usuario",
+      "description": "Guarda direcciones de entrega, datos de recepción, instrucciones y coordenadas opcionales. La columna generada default_user_ID y su índice único implementan unicidad para el usuario marcado como predeterminado.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "bigint unsigned",
+          "size": "No aplica",
+          "definition": "bigint unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "user_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la cuenta de usuario relacionada.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "address_label",
+          "type": "varchar(100)",
+          "size": "100",
+          "definition": "varchar(100) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Etiqueta asignada a la dirección.",
+          "keys": []
+        },
+        {
+          "name": "recipient_name",
+          "type": "varchar(150)",
+          "size": "150",
+          "definition": "varchar(150) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre de la persona destinataria.",
+          "keys": []
+        },
+        {
+          "name": "recipient_phone",
+          "type": "varchar(25)",
+          "size": "25",
+          "definition": "varchar(25) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Teléfono de la persona destinataria.",
+          "keys": []
+        },
+        {
+          "name": "delivery_instructions",
+          "type": "varchar(500)",
+          "size": "500",
+          "definition": "varchar(500) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Instrucciones textuales para la entrega.",
+          "keys": []
+        },
+        {
+          "name": "latitude",
+          "type": "decimal(10,7)",
+          "size": "10,7",
+          "definition": "decimal(10,7) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Coordenada de latitud; el CHECK limita el valor al intervalo de −90 a 90.",
+          "keys": []
+        },
+        {
+          "name": "longitude",
+          "type": "decimal(10,7)",
+          "size": "10,7",
+          "definition": "decimal(10,7) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Coordenada de longitud; el CHECK limita el valor al intervalo de −180 a 180.",
+          "keys": []
+        },
+        {
+          "name": "is_default",
+          "type": "tinyint(1)",
+          "size": "1",
+          "definition": "tinyint(1) NOT NULL DEFAULT '0'",
+          "nullable": false,
+          "default": "'0'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador numérico de si la dirección o método está marcado como predeterminado.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        },
+        {
+          "name": "default_user_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int GENERATED ALWAYS AS ((case when (`is_default` = 1) then `user_ID` else NULL end)) STORED",
+          "nullable": true,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": {
+            "expression": "(case when (`is_default` = 1) then `user_ID` else NULL end)",
+            "storage": "STORED"
+          },
+          "classification": "Identificador técnico",
+          "description": "Columna generada para aplicar unicidad al usuario cuya dirección está marcada como predeterminada.",
+          "keys": [
+            "UNIQUE"
+          ]
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "uq_tb_user_addresses_default_user",
+          "columns": [
+            "default_user_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "idx_user_addresses",
+          "columns": [
+            "user_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "user_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_addresses_users",
+          "columns": [
+            "user_ID"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_coordinates",
+          "expression": "(((`latitude` is null) and (`longitude` is null)) or ((`latitude` is not null) and (`longitude` is not null)))"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_latitude",
+          "expression": "(`latitude` between -(90) and 90)"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_longitude",
+          "expression": "(`longitude` between -(180) and 180)"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tb_users",
+      "title": "Cuentas de usuario",
+      "description": "Almacena credenciales de acceso, marcas de creación y actividad, último acceso y estado. email y nick son únicos.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "email",
+          "type": "varchar(100)",
+          "size": "100",
+          "definition": "varchar(100) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Dirección de correo electrónico de la cuenta.",
+          "keys": [
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "nick",
+          "type": "varchar(50)",
+          "size": "50",
+          "definition": "varchar(50) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Alias de la cuenta.",
+          "keys": [
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "password",
+          "type": "varchar(255)",
+          "size": "255",
+          "definition": "varchar(255) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Credencial de acceso almacenada como texto; el esquema por sí solo no especifica su tratamiento criptográfico.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        },
+        {
+          "name": "last_login",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora del acceso más reciente registrado.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) DEFAULT b'1'",
+          "nullable": true,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "email",
+          "columns": [
+            "email"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "nick",
+          "columns": [
+            "nick"
+          ]
+        }
+      ],
+      "constraints": [],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=7524 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbc_categories",
+      "title": "Categorías",
+      "description": "Catálogo jerárquico de categorías; sup_id_category declara una autorrelación opcional con la categoría superior.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "varchar(120)",
+          "size": "120",
+          "definition": "varchar(120) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre visible del elemento.",
+          "keys": [
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text",
+          "nullable": true,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Descripción textual del elemento.",
+          "keys": []
+        },
+        {
+          "name": "sup_id_category",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico opcional de la categoría superior.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "name",
+          "columns": [
+            "name"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_superior_category",
+          "columns": [
+            "sup_id_category"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "sup_id_category"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_superior_category",
+          "columns": [
+            "sup_id_category"
+          ],
+          "references": {
+            "table": "tbc_categories",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbc_payment_methods_types",
+      "title": "Tipos de método de pago",
+      "description": "Catálogo de tipos de método de pago con código único, descripción, estado y marcas temporales.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "code",
+          "type": "varchar(30)",
+          "size": "30",
+          "definition": "varchar(30) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Código único del tipo de método de pago.",
+          "keys": [
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Descripción textual del elemento.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "code_UNIQUE",
+          "columns": [
+            "code"
+          ]
+        }
+      ],
+      "constraints": [],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_address_components",
+      "title": "Componentes de dirección",
+      "description": "Representa partes tipadas de una dirección y su posible jerarquía dentro de esa misma dirección. Las FKs compuestas mantienen el componente padre dentro de la misma dirección.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "bigint unsigned",
+          "size": "No aplica",
+          "definition": "bigint unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK",
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "address_ID",
+          "type": "bigint unsigned",
+          "size": "No aplica",
+          "definition": "bigint unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la dirección a la que pertenece el componente.",
+          "keys": [
+            "UNIQUE",
+            "FK",
+            "FK"
+          ]
+        },
+        {
+          "name": "value",
+          "type": "varchar(255)",
+          "size": "255",
+          "definition": "varchar(255) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Valor textual del componente de dirección.",
+          "keys": []
+        },
+        {
+          "name": "component_type",
+          "type": "varchar(50)",
+          "size": "50",
+          "definition": "varchar(50) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Tipo textual del componente de dirección; no hay catálogo declarado en el SQL.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "address_sup_ID",
+          "type": "bigint unsigned",
+          "size": "No aplica",
+          "definition": "bigint unsigned DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico opcional del componente padre de la misma dirección.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "uk_address_component",
+          "columns": [
+            "address_ID",
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "idx_address_parent",
+          "columns": [
+            "address_ID",
+            "address_sup_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "address_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "address_ID",
+            "address_sup_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_component_address",
+          "columns": [
+            "address_ID"
+          ],
+          "references": {
+            "table": "tb_user_addresses",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "RESTRICT",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_component_parent",
+          "columns": [
+            "address_ID",
+            "address_sup_ID"
+          ],
+          "references": {
+            "table": "tbd_address_components",
+            "columns": [
+              "address_ID",
+              "ID"
+            ]
+          },
+          "onDelete": "RESTRICT",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_cancellation_items",
+      "title": "Detalles de cancelación",
+      "description": "Conserva motivo, pedido y usuario solicitante; cancellation_ID permite vincular opcionalmente el registro con una solicitud de tb_order_cancellations.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "cancellation_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico opcional que referencia tb_order_cancellations.ID.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "order_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pedido relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Motivo textual de la solicitud.",
+          "keys": []
+        },
+        {
+          "name": "requested_by",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del usuario que solicita la operación.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_cancellations_order",
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_cancellations_user",
+          "columns": [
+            "requested_by"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_cancellation_items_header",
+          "columns": [
+            "cancellation_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "cancellation_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "requested_by"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_cancellation_items_header",
+          "columns": [
+            "cancellation_ID"
+          ],
+          "references": {
+            "table": "tb_order_cancellations",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_cancellations_order",
+          "columns": [
+            "order_ID"
+          ],
+          "references": {
+            "table": "tb_orders",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_cancellations_user",
+          "columns": [
+            "requested_by"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_cart_items",
+      "title": "Artículos del carrito",
+      "description": "Asocia un carrito con una oferta de producto-proveedor y conserva la cantidad solicitada.",
+      "columns": [
+        {
+          "name": "cart_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del carrito relacionado.",
+          "keys": [
+            "PK",
+            "FK"
+          ]
+        },
+        {
+          "name": "provider_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del usuario proveedor.",
+          "keys": [
+            "PK",
+            "FK"
+          ]
+        },
+        {
+          "name": "product_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del producto relacionado.",
+          "keys": [
+            "PK",
+            "FK"
+          ]
+        },
+        {
+          "name": "quantity",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL DEFAULT '1'",
+          "nullable": false,
+          "default": "'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa discreta",
+          "description": "Cantidad de unidades.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "cart_ID",
+        "provider_ID",
+        "product_ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "cart_ID",
+            "provider_ID",
+            "product_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "idx_cart_items_provider_product",
+          "columns": [
+            "provider_ID",
+            "product_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "cart_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "provider_ID",
+            "product_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_cart_items_cart",
+          "columns": [
+            "cart_ID"
+          ],
+          "references": {
+            "table": "tb_carts",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_cart_items_provider_product",
+          "columns": [
+            "provider_ID",
+            "product_ID"
+          ],
+          "references": {
+            "table": "tbd_products_users_providers",
+            "columns": [
+              "user_ID",
+              "product_ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_cart_quantity",
+          "expression": "(`quantity` > 0)"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_order_items",
+      "title": "Partidas de pedido",
+      "description": "Conserva el producto y proveedor de cada partida, además del nombre y precio capturados. subtotal es una columna generada a partir de cantidad por precio unitario.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "seller_order_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pedido al que pertenece la partida.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "product_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del producto relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "provider_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del usuario proveedor.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "product_name",
+          "type": "varchar(255)",
+          "size": "255",
+          "definition": "varchar(255) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre del producto conservado en la partida del pedido.",
+          "keys": []
+        },
+        {
+          "name": "quantity",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa discreta",
+          "description": "Cantidad de unidades.",
+          "keys": []
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal(12,2)",
+          "size": "12,2",
+          "definition": "decimal(12,2) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cuantitativa continua",
+          "description": "Importe unitario conservado en la partida.",
+          "keys": []
+        },
+        {
+          "name": "subtotal",
+          "type": "decimal(12,2)",
+          "size": "12,2",
+          "definition": "decimal(12,2) GENERATED ALWAYS AS ((`quantity` * `unit_price`)) STORED",
+          "nullable": true,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": {
+            "expression": "(`quantity` * `unit_price`)",
+            "storage": "STORED"
+          },
+          "classification": "Cuantitativa continua",
+          "description": "Importe subtotal; cuando es generado, el SQL define la expresión que lo calcula.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "seller_order_ID",
+          "columns": [
+            "seller_order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "product_ID_provider_ID",
+          "columns": [
+            "product_ID",
+            "provider_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "seller_order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "product_ID",
+            "provider_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "tbd_order_items_ibfk_1",
+          "columns": [
+            "seller_order_ID"
+          ],
+          "references": {
+            "table": "tb_orders",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "tbd_order_items_ibfk_2",
+          "columns": [
+            "product_ID",
+            "provider_ID"
+          ],
+          "references": {
+            "table": "tbd_products_users_providers",
+            "columns": [
+              "product_ID",
+              "user_ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "CHECK",
+          "name": "tbd_order_items_chk_1",
+          "expression": "(`quantity` > 0)"
+        },
+        {
+          "type": "CHECK",
+          "name": "tbd_order_items_chk_2",
+          "expression": "(`unit_price` >= 0)"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_products_categories",
+      "title": "Asignaciones de categoría",
+      "description": "Tabla de asociación entre productos y categorías, con estado y fechas.",
+      "columns": [
+        {
+          "name": "product_Id",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del producto relacionado.",
+          "keys": [
+            "PK",
+            "FK"
+          ]
+        },
+        {
+          "name": "category_Id",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la categoría relacionada.",
+          "keys": [
+            "PK",
+            "FK"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "product_Id",
+        "category_Id"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "product_Id",
+            "category_Id"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_pc_category",
+          "columns": [
+            "category_Id"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "category_Id"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "product_Id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_pc_category",
+          "columns": [
+            "category_Id"
+          ],
+          "references": {
+            "table": "tbc_categories",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_pc_product",
+          "columns": [
+            "product_Id"
+          ],
+          "references": {
+            "table": "tb_products",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_products_users_providers",
+      "title": "Ofertas de producto por proveedor",
+      "description": "Asocia cuentas proveedoras con productos e incluye tipo de titularidad y vigencia de la oferta.",
+      "columns": [
+        {
+          "name": "user_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la cuenta de usuario relacionada.",
+          "keys": [
+            "PK",
+            "UNIQUE",
+            "FK"
+          ]
+        },
+        {
+          "name": "product_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del producto relacionado.",
+          "keys": [
+            "PK",
+            "UNIQUE",
+            "FK"
+          ]
+        },
+        {
+          "name": "type_ownership",
+          "type": "enum('Owner','Reseller','Distributor')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Owner','Reseller','Distributor') DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Categoría del tipo de titularidad; los valores permitidos aparecen en el ENUM SQL.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "avalaible_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora desde la que se registra disponible la oferta.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora final registrada para la oferta.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "user_ID",
+        "product_ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "user_ID",
+            "product_ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "uidx_product_user",
+          "columns": [
+            "product_ID",
+            "user_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "product_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "user_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_products2",
+          "columns": [
+            "product_ID"
+          ],
+          "references": {
+            "table": "tb_products",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_user1",
+          "columns": [
+            "user_ID"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_return_items",
+      "title": "Detalles de devolución",
+      "description": "Conserva motivo, estado y pedido asociado; return_ID permite vincular opcionalmente el registro con una solicitud de tb_returns.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "return_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico opcional que referencia tb_returns.ID.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "order_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del pedido relacionado.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "size": "sin longitud declarada",
+          "definition": "text NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Motivo textual de la solicitud.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "enum('Requested','Approved','Rejected','Completed')",
+          "size": "No aplica (ENUM)",
+          "definition": "enum('Requested','Approved','Rejected','Completed') NOT NULL DEFAULT 'Requested'",
+          "nullable": false,
+          "default": "'Requested'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Cualitativa nominal",
+          "description": "Estado categórico del registro; los valores permitidos son los enumerados en la definición ENUM de SQL.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_returns_order",
+          "columns": [
+            "order_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_return_items_header",
+          "columns": [
+            "return_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "return_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "order_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_return_items_header",
+          "columns": [
+            "return_ID"
+          ],
+          "references": {
+            "table": "tb_returns",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_returns_order",
+          "columns": [
+            "order_ID"
+          ],
+          "references": {
+            "table": "tb_orders",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_user_payment_methods",
+      "title": "Métodos de pago de usuario",
+      "description": "Guarda referencias tokenizadas de métodos de pago asociadas a una cuenta y un tipo de método. El esquema no contiene el número completo de tarjeta.",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "bigint unsigned",
+          "size": "No aplica",
+          "definition": "bigint unsigned NOT NULL AUTO_INCREMENT",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": true,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la fila.",
+          "keys": [
+            "PK"
+          ]
+        },
+        {
+          "name": "user_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la cuenta de usuario relacionada.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "payment_method_type_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del tipo de método de pago.",
+          "keys": [
+            "FK"
+          ]
+        },
+        {
+          "name": "provider",
+          "type": "varchar(60)",
+          "size": "60",
+          "definition": "varchar(60) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Nombre del proveedor externo del método de pago.",
+          "keys": [
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "provider_method_ref",
+          "type": "varchar(255)",
+          "size": "255",
+          "definition": "varchar(255) NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Referencia del método de pago en el proveedor externo.",
+          "keys": [
+            "UNIQUE"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "varchar(100)",
+          "size": "100",
+          "definition": "varchar(100) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Etiqueta descriptiva opcional del método de pago.",
+          "keys": []
+        },
+        {
+          "name": "last_four",
+          "type": "char(4)",
+          "size": "4",
+          "definition": "char(4) DEFAULT NULL",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Texto descriptivo",
+          "description": "Últimos cuatro caracteres mostrables de la referencia de pago.",
+          "keys": []
+        },
+        {
+          "name": "is_default",
+          "type": "tinyint(1)",
+          "size": "1",
+          "definition": "tinyint(1) NOT NULL DEFAULT '0'",
+          "nullable": false,
+          "default": "'0'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador numérico de si la dirección o método está marcado como predeterminado.",
+          "keys": []
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "ID"
+          ]
+        },
+        {
+          "kind": "UNIQUE",
+          "name": "uk_provider_method",
+          "columns": [
+            "provider",
+            "provider_method_ref"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "user_ID",
+          "columns": [
+            "user_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "payment_method_type_ID",
+          "columns": [
+            "payment_method_type_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "user_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "payment_method_type_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "tbd_user_payment_methods_ibfk_1",
+          "columns": [
+            "user_ID"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "tbd_user_payment_methods_ibfk_2",
+          "columns": [
+            "payment_method_type_ID"
+          ],
+          "references": {
+            "table": "tbc_payment_methods_types",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "tbd_users_wishlist_products",
+      "title": "Lista de deseos",
+      "description": "Asocia usuarios con productos guardados y conserva estado y marcas temporales.",
+      "columns": [
+        {
+          "name": "user_ID",
+          "type": "int",
+          "size": "No aplica",
+          "definition": "int NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico de la cuenta de usuario relacionada.",
+          "keys": [
+            "PK",
+            "FK"
+          ]
+        },
+        {
+          "name": "product_ID",
+          "type": "int unsigned",
+          "size": "No aplica",
+          "definition": "int unsigned NOT NULL",
+          "nullable": false,
+          "default": null,
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Identificador técnico",
+          "description": "Identificador técnico del producto relacionado.",
+          "keys": [
+            "PK",
+            "FK"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "bit(1)",
+          "size": "1",
+          "definition": "bit(1) NOT NULL DEFAULT b'1'",
+          "nullable": false,
+          "default": "b'1'",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Binaria o técnica",
+          "description": "Indicador de estado almacenado como bit.",
+          "keys": []
+        },
+        {
+          "name": "creation_date",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": null,
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
+        }
+      ],
+      "primaryKey": [
+        "user_ID",
+        "product_ID"
+      ],
+      "indexes": [
+        {
+          "kind": "PRIMARY",
+          "name": "PRIMARY",
+          "columns": [
+            "user_ID",
+            "product_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": "fk_products3",
+          "columns": [
+            "product_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "product_ID"
+          ]
+        },
+        {
+          "kind": "INDEX",
+          "name": null,
+          "columns": [
+            "user_ID"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_products3",
+          "columns": [
+            "product_ID"
+          ],
+          "references": {
+            "table": "tb_products",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        },
+        {
+          "type": "FOREIGN KEY",
+          "name": "fk_user2",
+          "columns": [
+            "user_ID"
+          ],
+          "references": {
+            "table": "tb_users",
+            "columns": [
+              "ID"
+            ]
+          },
+          "onDelete": "NO ACTION",
+          "onUpdate": "NO ACTION"
+        }
+      ],
+      "engine": "InnoDB",
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "relation-1",
+      "sourceTable": "tb_carts",
+      "sourceColumns": [
+        "user_ID"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "tb_carts_ibfk_1",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..1",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..1",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Carritos de compra referencia Cuentas de usuario mediante la restricción declarada tb_carts_ibfk_1."
+    },
+    {
+      "id": "relation-2",
+      "sourceTable": "tb_order_cancellations",
+      "sourceColumns": [
+        "order_ID"
+      ],
+      "targetTable": "tb_orders",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_order_cancellations_order",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Solicitudes de cancelación de pedido referencia Pedidos mediante la restricción declarada fk_order_cancellations_order."
+    },
+    {
+      "id": "relation-3",
+      "sourceTable": "tb_order_cancellations",
+      "sourceColumns": [
+        "requested_by"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_order_cancellations_user",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Solicitudes de cancelación de pedido referencia Cuentas de usuario mediante la restricción declarada fk_order_cancellations_user."
+    },
+    {
+      "id": "relation-4",
+      "sourceTable": "tb_orders",
+      "sourceColumns": [
+        "seller_ID"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "tb_orders_ibfk_1",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Pedidos referencia Cuentas de usuario mediante la restricción declarada tb_orders_ibfk_1."
+    },
+    {
+      "id": "relation-5",
+      "sourceTable": "tb_payment_transaction",
+      "sourceColumns": [
+        "payment_ID"
+      ],
+      "targetTable": "tb_payments",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_trans_payment",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Transacciones de pago referencia Pagos mediante la restricción declarada fk_trans_payment."
+    },
+    {
+      "id": "relation-6",
+      "sourceTable": "tb_payments",
+      "sourceColumns": [
+        "order_ID"
+      ],
+      "targetTable": "tb_orders",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_payments_order",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Pagos referencia Pedidos mediante la restricción declarada fk_payments_order."
+    },
+    {
+      "id": "relation-7",
+      "sourceTable": "tb_payments",
+      "sourceColumns": [
+        "user_payment_method_ID"
+      ],
+      "targetTable": "tbd_user_payment_methods",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_payments_user_method",
+      "sourceCardinality": "0..1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 0..1; destino → filas de origen: 0..N",
+      "sourceOptional": true,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Pagos referencia Métodos de pago de usuario mediante la restricción declarada fk_payments_user_method."
+    },
+    {
+      "id": "relation-8",
+      "sourceTable": "tb_people",
+      "sourceColumns": [
+        "user_ID"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_people_users",
+      "sourceCardinality": "0..1",
+      "targetCardinality": "0..1",
+      "cardinality": "origen → destino: 0..1; destino → filas de origen: 0..1",
+      "sourceOptional": true,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Personas referencia Cuentas de usuario mediante la restricción declarada fk_people_users."
+    },
+    {
+      "id": "relation-9",
+      "sourceTable": "tb_refunds",
+      "sourceColumns": [
+        "payment_ID"
+      ],
+      "targetTable": "tb_payments",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_refunds_payment",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Reembolsos referencia Pagos mediante la restricción declarada fk_refunds_payment."
+    },
+    {
+      "id": "relation-10",
+      "sourceTable": "tb_returns",
+      "sourceColumns": [
+        "order_ID"
+      ],
+      "targetTable": "tb_orders",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_returns_order_hdr",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Solicitudes de devolución referencia Pedidos mediante la restricción declarada fk_returns_order_hdr."
+    },
+    {
+      "id": "relation-11",
+      "sourceTable": "tb_returns",
+      "sourceColumns": [
+        "requested_by"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_returns_user",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Solicitudes de devolución referencia Cuentas de usuario mediante la restricción declarada fk_returns_user."
+    },
+    {
+      "id": "relation-12",
+      "sourceTable": "tb_shipments",
+      "sourceColumns": [
+        "order_ID"
+      ],
+      "targetTable": "tb_orders",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_shipments_order",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Envíos referencia Pedidos mediante la restricción declarada fk_shipments_order."
+    },
+    {
+      "id": "relation-13",
+      "sourceTable": "tb_user_addresses",
+      "sourceColumns": [
+        "user_ID"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_addresses_users",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Direcciones de usuario referencia Cuentas de usuario mediante la restricción declarada fk_addresses_users."
+    },
+    {
+      "id": "relation-14",
+      "sourceTable": "tbc_categories",
+      "sourceColumns": [
+        "sup_id_category"
+      ],
+      "targetTable": "tbc_categories",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_superior_category",
+      "sourceCardinality": "0..1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 0..1; destino → filas de origen: 0..N",
+      "sourceOptional": true,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Categorías referencia Categorías mediante la restricción declarada fk_superior_category."
+    },
+    {
+      "id": "relation-15",
+      "sourceTable": "tbd_address_components",
+      "sourceColumns": [
+        "address_ID"
+      ],
+      "targetTable": "tb_user_addresses",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_component_address",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "RESTRICT",
+      "onUpdate": "NO ACTION",
+      "description": "Componentes de dirección referencia Direcciones de usuario mediante la restricción declarada fk_component_address."
+    },
+    {
+      "id": "relation-16",
+      "sourceTable": "tbd_address_components",
+      "sourceColumns": [
+        "address_ID",
+        "address_sup_ID"
+      ],
+      "targetTable": "tbd_address_components",
+      "targetColumns": [
+        "address_ID",
+        "ID"
+      ],
+      "constraint": "fk_component_parent",
+      "sourceCardinality": "0..1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 0..1; destino → filas de origen: 0..N",
+      "sourceOptional": true,
+      "onDelete": "RESTRICT",
+      "onUpdate": "NO ACTION",
+      "description": "Componentes de dirección referencia Componentes de dirección mediante la restricción declarada fk_component_parent."
+    },
+    {
+      "id": "relation-17",
+      "sourceTable": "tbd_cancellation_items",
+      "sourceColumns": [
+        "cancellation_ID"
+      ],
+      "targetTable": "tb_order_cancellations",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_cancellation_items_header",
+      "sourceCardinality": "0..1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 0..1; destino → filas de origen: 0..N",
+      "sourceOptional": true,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Detalles de cancelación referencia Solicitudes de cancelación de pedido mediante la restricción declarada fk_cancellation_items_header."
+    },
+    {
+      "id": "relation-18",
+      "sourceTable": "tbd_cancellation_items",
+      "sourceColumns": [
+        "order_ID"
+      ],
+      "targetTable": "tb_orders",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_cancellations_order",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Detalles de cancelación referencia Pedidos mediante la restricción declarada fk_cancellations_order."
+    },
+    {
+      "id": "relation-19",
+      "sourceTable": "tbd_cancellation_items",
+      "sourceColumns": [
+        "requested_by"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_cancellations_user",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Detalles de cancelación referencia Cuentas de usuario mediante la restricción declarada fk_cancellations_user."
+    },
+    {
+      "id": "relation-20",
+      "sourceTable": "tbd_cart_items",
+      "sourceColumns": [
+        "cart_ID"
+      ],
+      "targetTable": "tb_carts",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_cart_items_cart",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Artículos del carrito referencia Carritos de compra mediante la restricción declarada fk_cart_items_cart."
+    },
+    {
+      "id": "relation-21",
+      "sourceTable": "tbd_cart_items",
+      "sourceColumns": [
+        "provider_ID",
+        "product_ID"
+      ],
+      "targetTable": "tbd_products_users_providers",
+      "targetColumns": [
+        "user_ID",
+        "product_ID"
+      ],
+      "constraint": "fk_cart_items_provider_product",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Artículos del carrito referencia Ofertas de producto por proveedor mediante la restricción declarada fk_cart_items_provider_product."
+    },
+    {
+      "id": "relation-22",
+      "sourceTable": "tbd_order_items",
+      "sourceColumns": [
+        "seller_order_ID"
+      ],
+      "targetTable": "tb_orders",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "tbd_order_items_ibfk_1",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Partidas de pedido referencia Pedidos mediante la restricción declarada tbd_order_items_ibfk_1."
+    },
+    {
+      "id": "relation-23",
+      "sourceTable": "tbd_order_items",
+      "sourceColumns": [
+        "product_ID",
+        "provider_ID"
+      ],
+      "targetTable": "tbd_products_users_providers",
+      "targetColumns": [
+        "product_ID",
+        "user_ID"
+      ],
+      "constraint": "tbd_order_items_ibfk_2",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Partidas de pedido referencia Ofertas de producto por proveedor mediante la restricción declarada tbd_order_items_ibfk_2."
+    },
+    {
+      "id": "relation-24",
+      "sourceTable": "tbd_products_categories",
+      "sourceColumns": [
+        "category_Id"
+      ],
+      "targetTable": "tbc_categories",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_pc_category",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Asignaciones de categoría referencia Categorías mediante la restricción declarada fk_pc_category."
+    },
+    {
+      "id": "relation-25",
+      "sourceTable": "tbd_products_categories",
+      "sourceColumns": [
+        "product_Id"
+      ],
+      "targetTable": "tb_products",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_pc_product",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Asignaciones de categoría referencia Productos mediante la restricción declarada fk_pc_product."
+    },
+    {
+      "id": "relation-26",
+      "sourceTable": "tbd_products_users_providers",
+      "sourceColumns": [
+        "product_ID"
+      ],
+      "targetTable": "tb_products",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_products2",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Ofertas de producto por proveedor referencia Productos mediante la restricción declarada fk_products2."
+    },
+    {
+      "id": "relation-27",
+      "sourceTable": "tbd_products_users_providers",
+      "sourceColumns": [
+        "user_ID"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_user1",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Ofertas de producto por proveedor referencia Cuentas de usuario mediante la restricción declarada fk_user1."
+    },
+    {
+      "id": "relation-28",
+      "sourceTable": "tbd_return_items",
+      "sourceColumns": [
+        "return_ID"
+      ],
+      "targetTable": "tb_returns",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_return_items_header",
+      "sourceCardinality": "0..1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 0..1; destino → filas de origen: 0..N",
+      "sourceOptional": true,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Detalles de devolución referencia Solicitudes de devolución mediante la restricción declarada fk_return_items_header."
+    },
+    {
+      "id": "relation-29",
+      "sourceTable": "tbd_return_items",
+      "sourceColumns": [
+        "order_ID"
+      ],
+      "targetTable": "tb_orders",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_returns_order",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Detalles de devolución referencia Pedidos mediante la restricción declarada fk_returns_order."
+    },
+    {
+      "id": "relation-30",
+      "sourceTable": "tbd_user_payment_methods",
+      "sourceColumns": [
+        "user_ID"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "tbd_user_payment_methods_ibfk_1",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Métodos de pago de usuario referencia Cuentas de usuario mediante la restricción declarada tbd_user_payment_methods_ibfk_1."
+    },
+    {
+      "id": "relation-31",
+      "sourceTable": "tbd_user_payment_methods",
+      "sourceColumns": [
+        "payment_method_type_ID"
+      ],
+      "targetTable": "tbc_payment_methods_types",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "tbd_user_payment_methods_ibfk_2",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Métodos de pago de usuario referencia Tipos de método de pago mediante la restricción declarada tbd_user_payment_methods_ibfk_2."
+    },
+    {
+      "id": "relation-32",
+      "sourceTable": "tbd_users_wishlist_products",
+      "sourceColumns": [
+        "product_ID"
+      ],
+      "targetTable": "tb_products",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_products3",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Lista de deseos referencia Productos mediante la restricción declarada fk_products3."
+    },
+    {
+      "id": "relation-33",
+      "sourceTable": "tbd_users_wishlist_products",
+      "sourceColumns": [
+        "user_ID"
+      ],
+      "targetTable": "tb_users",
+      "targetColumns": [
+        "ID"
+      ],
+      "constraint": "fk_user2",
+      "sourceCardinality": "1",
+      "targetCardinality": "0..N",
+      "cardinality": "origen → destino: 1; destino → filas de origen: 0..N",
+      "sourceOptional": false,
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION",
+      "description": "Lista de deseos referencia Cuentas de usuario mediante la restricción declarada fk_user2."
+    }
+  ],
+  "objects": {
+    "triggers": [
+      {
+        "name": "trg_tb_carts_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_carts"
+      },
+      {
+        "name": "trg_tb_carts_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_carts"
+      },
+      {
+        "name": "trg_tb_carts_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_carts"
+      },
+      {
+        "name": "trg_tb_order_cancellations_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_order_cancellations"
+      },
+      {
+        "name": "trg_tb_order_cancellations_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_order_cancellations"
+      },
+      {
+        "name": "trg_tb_order_cancellations_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_order_cancellations"
+      },
+      {
+        "name": "trg_tb_orders_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_orders"
+      },
+      {
+        "name": "trg_tb_orders_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_orders"
+      },
+      {
+        "name": "trg_tb_orders_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_orders"
+      },
+      {
+        "name": "trg_tb_payment_methods_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_payment_methods"
+      },
+      {
+        "name": "trg_tb_payment_methods_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_payment_methods"
+      },
+      {
+        "name": "trg_tb_payment_methods_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_payment_methods"
+      },
+      {
+        "name": "trg_tb_payment_transaction_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_payment_transaction"
+      },
+      {
+        "name": "trg_tb_payment_transaction_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_payment_transaction"
+      },
+      {
+        "name": "trg_tb_payment_transaction_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_payment_transaction"
+      },
+      {
+        "name": "trg_tb_payments_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_payments"
+      },
+      {
+        "name": "trg_tb_payments_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_payments"
+      },
+      {
+        "name": "trg_tb_payments_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_payments"
+      },
+      {
+        "name": "trg_tb_people_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_people"
+      },
+      {
+        "name": "trg_tb_people_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_people"
+      },
+      {
+        "name": "trg_tb_people_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_people"
+      },
+      {
+        "name": "trg_tb_products_after_insert",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_products"
+      },
+      {
+        "name": "trg_tb_products_after_update",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_products"
+      },
+      {
+        "name": "trg_tb_products_after_delete",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_products"
+      },
+      {
+        "name": "trg_tb_refunds_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_refunds"
+      },
+      {
+        "name": "trg_tb_refunds_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_refunds"
+      },
+      {
+        "name": "trg_tb_refunds_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_refunds"
+      },
+      {
+        "name": "trg_tb_returns_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_returns"
+      },
+      {
+        "name": "trg_tb_returns_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_returns"
+      },
+      {
+        "name": "trg_tb_returns_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_returns"
+      },
+      {
+        "name": "trg_tb_shipments_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_shipments"
+      },
+      {
+        "name": "trg_tb_shipments_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_shipments"
+      },
+      {
+        "name": "trg_tb_shipments_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_shipments"
+      },
+      {
+        "name": "trg_tb_user_addresses_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_user_addresses"
+      },
+      {
+        "name": "trg_tb_user_addresses_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_user_addresses"
+      },
+      {
+        "name": "trg_tb_user_addresses_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_user_addresses"
+      },
+      {
+        "name": "trg_users_after_insert",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_users"
+      },
+      {
+        "name": "trg_users_after_update",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_users"
+      },
+      {
+        "name": "trg_users_after_delete",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_users"
+      },
+      {
+        "name": "trg_tbc_categories_after_insert",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbc_categories"
+      },
+      {
+        "name": "trg_tbc_categories_after_update",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbc_categories"
+      },
+      {
+        "name": "trg_tbc_categories_after_delete",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbc_categories"
+      },
+      {
+        "name": "trg_tbc_payment_methods_types_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbc_payment_methods_types"
+      },
+      {
+        "name": "trg_tbc_payment_methods_types_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbc_payment_methods_types"
+      },
+      {
+        "name": "trg_tbc_payment_methods_types_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbc_payment_methods_types"
+      },
+      {
+        "name": "trg_tbd_address_components_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_address_components"
+      },
+      {
+        "name": "trg_tbd_address_components_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_address_components"
+      },
+      {
+        "name": "trg_tbd_address_components_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_address_components"
+      },
+      {
+        "name": "trg_tbd_cancellation_items_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_cancellation_items"
+      },
+      {
+        "name": "trg_tbd_cancellation_items_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_cancellation_items"
+      },
+      {
+        "name": "trg_tbd_cancellation_items_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_cancellation_items"
+      },
+      {
+        "name": "trg_tbd_cart_items_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_cart_items"
+      },
+      {
+        "name": "trg_tbd_cart_items_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_cart_items"
+      },
+      {
+        "name": "trg_tbd_cart_items_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_cart_items"
+      },
+      {
+        "name": "trg_tbd_order_items_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_order_items"
+      },
+      {
+        "name": "trg_tbd_order_items_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_order_items"
+      },
+      {
+        "name": "trg_tbd_order_items_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_order_items"
+      },
+      {
+        "name": "trg_tbd_products_categories_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_products_categories"
+      },
+      {
+        "name": "trg_tbd_products_categories_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_products_categories"
+      },
+      {
+        "name": "trg_tbd_products_categories_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_products_categories"
+      },
+      {
+        "name": "trg_tbd_products_users_providers_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_products_users_providers"
+      },
+      {
+        "name": "trg_tbd_products_users_providers_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_products_users_providers"
+      },
+      {
+        "name": "trg_tbd_products_users_providers_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_products_users_providers"
+      },
+      {
+        "name": "trg_tbd_return_items_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_return_items"
+      },
+      {
+        "name": "trg_tbd_return_items_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_return_items"
+      },
+      {
+        "name": "trg_tbd_return_items_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_return_items"
+      },
+      {
+        "name": "trg_tbd_user_payment_methods_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_user_payment_methods"
+      },
+      {
+        "name": "trg_tbd_user_payment_methods_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_user_payment_methods"
+      },
+      {
+        "name": "trg_tbd_user_payment_methods_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_user_payment_methods"
+      },
+      {
+        "name": "trg_tbd_users_wishlist_products_ai",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_users_wishlist_products"
+      },
+      {
+        "name": "trg_tbd_users_wishlist_products_au",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_users_wishlist_products"
+      },
+      {
+        "name": "trg_tbd_users_wishlist_products_ad",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_users_wishlist_products"
+      }
+    ],
+    "procedures": [
+      {
+        "name": "sp_register_new_user",
+        "parameters": [
+          "IN p_email          VARCHAR(100"
+        ],
+        "modifiesSqlData": false,
+        "description": "Registra una cuenta y la información de persona relacionada, según el procedimiento almacenado."
+      },
+      {
+        "name": "sp_restore_product",
+        "parameters": [
+          "IN p_product_id INT UNSIGNED"
+        ],
+        "modifiesSqlData": false,
+        "description": "Reactiva el estado de un producto tras validar su existencia y estado actual."
+      },
+      {
+        "name": "sp_soft_delete_product",
+        "parameters": [
+          "IN p_product_id INT UNSIGNED"
+        ],
+        "modifiesSqlData": false,
+        "description": "Marca un producto como inactivo tras validar su existencia y estado actual."
+      }
+    ],
+    "views": [
+      {
+        "name": "vw_address_hierarchical_details"
+      },
+      {
+        "name": "vw_people_details"
+      },
+      {
+        "name": "vw_total_products_by_category"
+      },
+      {
+        "name": "vw_trazabilidad_carritos"
+      },
+      {
+        "name": "vw_trazabilidad_carts_items"
+      },
+      {
+        "name": "vw_trazabilidad_categorizacion_productos"
+      },
+      {
+        "name": "vw_trazabilidad_componentes_direccion"
+      },
+      {
+        "name": "vw_trazabilidad_direcciones"
+      },
+      {
+        "name": "vw_trazabilidad_order_items"
+      },
+      {
+        "name": "vw_trazabilidad_personas"
+      },
+      {
+        "name": "vw_trazabilidad_productos"
+      },
+      {
+        "name": "vw_trazabilidad_productos_proveedores"
+      },
+      {
+        "name": "vw_trazabilidad_tb_carts"
+      },
+      {
+        "name": "vw_trazabilidad_tb_order_cancellations"
+      },
+      {
+        "name": "vw_trazabilidad_tb_orders"
+      },
+      {
+        "name": "vw_trazabilidad_tb_payment_methods"
+      },
+      {
+        "name": "vw_trazabilidad_tb_payment_transaction"
+      },
+      {
+        "name": "vw_trazabilidad_tb_payments"
+      },
+      {
+        "name": "vw_trazabilidad_tb_people"
+      },
+      {
+        "name": "vw_trazabilidad_tb_products"
+      },
+      {
+        "name": "vw_trazabilidad_tb_refunds"
+      },
+      {
+        "name": "vw_trazabilidad_tb_returns"
+      },
+      {
+        "name": "vw_trazabilidad_tb_shipments"
+      },
+      {
+        "name": "vw_trazabilidad_tb_user_addresses"
+      },
+      {
+        "name": "vw_trazabilidad_tb_users"
+      },
+      {
+        "name": "vw_trazabilidad_tbc_categories"
+      },
+      {
+        "name": "vw_trazabilidad_tbc_payment_methods_types"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_address_components"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_cancellation_items"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_cart_items"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_order_items"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_products_categories"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_products_users_providers"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_return_items"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_user_payment_methods"
+      },
+      {
+        "name": "vw_trazabilidad_tbd_users_wishlist_products"
+      },
+      {
+        "name": "vw_trazabilidad_tipos_metodos_pago"
+      },
+      {
+        "name": "vw_trazabilidad_usuario_metodos_pago"
+      },
+      {
+        "name": "vw_trazabilidad_usuarios"
+      },
+      {
+        "name": "vw_trazabilidad_wishlist"
+      },
+      {
+        "name": "vw_user_default_shipping_addresses"
+      },
+      {
+        "name": "vw_wishlist_carritos"
+      }
+    ]
+  },
+  "summary": {
+    "tables": 25,
+    "columns": 181,
+    "primaryKeys": 25,
+    "foreignKeys": 33,
+    "indexes": 97,
+    "constraints": 66,
+    "relationships": 33,
+    "triggers": 72,
+    "procedures": 3,
+    "views": 42,
+    "undocumentedFields": 0
+  }
+}
