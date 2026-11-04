@@ -1,8 +1,9 @@
 {
   "database": "db_test_7b",
   "mysqlVersion": "8.4.9",
-  "source": "backups/respaldo_29_10_2026_DGC.sql",
-  "generatedAt": "2026-10-30",
+  "source": "backups/respaldo_31_10_2026_DGC.sql",
+  "backupDate": "2026-11-03",
+  "generatedAt": "2026-11-03",
   "tables": [
     {
       "name": "tb_carts",
@@ -291,7 +292,7 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=28062 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=28066 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
     },
     {
       "name": "tb_order_cancellations",
@@ -732,6 +733,20 @@
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
           "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
         }
       ],
       "primaryKey": [
@@ -841,6 +856,20 @@
           "generated": null,
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
           "keys": []
         }
       ],
@@ -983,6 +1012,20 @@
           "generated": null,
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
           "keys": []
         }
       ],
@@ -1411,9 +1454,9 @@
           "name": "last_update",
           "type": "datetime",
           "size": "No aplica",
-          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-          "nullable": false,
-          "default": "CURRENT_TIMESTAMP",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
           "autoIncrement": false,
           "onUpdate": "CURRENT_TIMESTAMP",
           "generated": null,
@@ -1522,6 +1565,20 @@
           "generated": null,
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
           "keys": []
         }
       ],
@@ -1861,6 +1918,20 @@
           "generated": null,
           "classification": "Temporal",
           "description": "Fecha y hora de entrega.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
           "keys": []
         }
       ],
@@ -2428,9 +2499,9 @@
           "name": "last_update",
           "type": "datetime",
           "size": "No aplica",
-          "definition": "datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP",
-          "nullable": false,
-          "default": null,
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
           "autoIncrement": false,
           "onUpdate": "CURRENT_TIMESTAMP",
           "generated": null,
@@ -2912,6 +2983,20 @@
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
           "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
         }
       ],
       "primaryKey": [
@@ -3100,6 +3185,20 @@
           "generated": null,
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
           "keys": []
         }
       ],
@@ -3325,6 +3424,20 @@
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
           "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
         }
       ],
       "primaryKey": [
@@ -3487,9 +3600,9 @@
           "name": "last_update",
           "type": "datetime",
           "size": "No aplica",
-          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-          "nullable": false,
-          "default": "CURRENT_TIMESTAMP",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
           "autoIncrement": false,
           "onUpdate": "CURRENT_TIMESTAMP",
           "generated": null,
@@ -3678,6 +3791,20 @@
           "classification": "Temporal",
           "description": "Fecha y hora final registrada para la oferta.",
           "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
+          "keys": []
         }
       ],
       "primaryKey": [
@@ -3844,6 +3971,20 @@
           "generated": null,
           "classification": "Temporal",
           "description": "Fecha y hora de creación del registro.",
+          "keys": []
+        },
+        {
+          "name": "last_update",
+          "type": "datetime",
+          "size": "No aplica",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
+          "autoIncrement": false,
+          "onUpdate": "CURRENT_TIMESTAMP",
+          "generated": null,
+          "classification": "Temporal",
+          "description": "Fecha y hora de actualización; el SQL puede actualizarla automáticamente.",
           "keys": []
         }
       ],
@@ -4246,9 +4387,9 @@
           "name": "last_update",
           "type": "datetime",
           "size": "No aplica",
-          "definition": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-          "nullable": false,
-          "default": "CURRENT_TIMESTAMP",
+          "definition": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+          "nullable": true,
+          "default": "NULL",
           "autoIncrement": false,
           "onUpdate": "CURRENT_TIMESTAMP",
           "generated": null,
@@ -5402,9 +5543,18 @@
       {
         "name": "sp_register_new_user",
         "parameters": [
-          "IN p_email          VARCHAR(100"
+          "IN p_email          VARCHAR(100)",
+          "IN p_nick           VARCHAR(50)",
+          "IN p_password       VARCHAR(255)",
+          "IN p_courtesy_title VARCHAR(20)",
+          "IN p_given_names    VARCHAR(150)",
+          "IN p_family_names   VARCHAR(150)",
+          "IN p_birth_date     DATE",
+          "IN p_gender         VARCHAR(30)",
+          "IN p_country_code   CHAR(2)",
+          "IN p_phone          VARCHAR(25)"
         ],
-        "modifiesSqlData": false,
+        "modifiesSqlData": true,
         "description": "Registra una cuenta y la información de persona relacionada, según el procedimiento almacenado."
       },
       {
@@ -5462,9 +5612,6 @@
         "name": "vw_trazabilidad_productos_proveedores"
       },
       {
-        "name": "vw_trazabilidad_tb_carts"
-      },
-      {
         "name": "vw_trazabilidad_tb_order_cancellations"
       },
       {
@@ -5480,12 +5627,6 @@
         "name": "vw_trazabilidad_tb_payments"
       },
       {
-        "name": "vw_trazabilidad_tb_people"
-      },
-      {
-        "name": "vw_trazabilidad_tb_products"
-      },
-      {
         "name": "vw_trazabilidad_tb_refunds"
       },
       {
@@ -5495,43 +5636,16 @@
         "name": "vw_trazabilidad_tb_shipments"
       },
       {
-        "name": "vw_trazabilidad_tb_user_addresses"
-      },
-      {
-        "name": "vw_trazabilidad_tb_users"
-      },
-      {
         "name": "vw_trazabilidad_tbc_categories"
-      },
-      {
-        "name": "vw_trazabilidad_tbc_payment_methods_types"
-      },
-      {
-        "name": "vw_trazabilidad_tbd_address_components"
       },
       {
         "name": "vw_trazabilidad_tbd_cancellation_items"
       },
       {
-        "name": "vw_trazabilidad_tbd_cart_items"
-      },
-      {
-        "name": "vw_trazabilidad_tbd_order_items"
-      },
-      {
         "name": "vw_trazabilidad_tbd_products_categories"
       },
       {
-        "name": "vw_trazabilidad_tbd_products_users_providers"
-      },
-      {
         "name": "vw_trazabilidad_tbd_return_items"
-      },
-      {
-        "name": "vw_trazabilidad_tbd_user_payment_methods"
-      },
-      {
-        "name": "vw_trazabilidad_tbd_users_wishlist_products"
       },
       {
         "name": "vw_trazabilidad_tipos_metodos_pago"
@@ -5551,11 +5665,13 @@
       {
         "name": "vw_wishlist_carritos"
       }
-    ]
+    ],
+    "functions": [],
+    "events": []
   },
   "summary": {
     "tables": 25,
-    "columns": 181,
+    "columns": 191,
     "primaryKeys": 25,
     "foreignKeys": 33,
     "indexes": 97,
@@ -5563,7 +5679,9 @@
     "relationships": 33,
     "triggers": 72,
     "procedures": 3,
-    "views": 42,
+    "functions": 0,
+    "views": 30,
+    "events": 0,
     "undocumentedFields": 0
   }
 }

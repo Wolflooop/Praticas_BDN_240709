@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const dir=path.dirname(fileURLToPath(import.meta.url)),root=path.resolve(dir,'..');
 const read=p=>fs.readFileSync(p,'utf8');
-const sql=read(path.join(root,'backups','respaldo_29_10_2026_DGC.sql'));
+const sql=read(path.join(root,'backups','respaldo_31_10_2026_DGC.sql'));
 const model=JSON.parse(read(path.join(dir,'schema-model.json')));
 const diagram=read(path.join(dir,'modelo-db-test-7b.html'));
 const template=read(path.join(dir,'diagram-template.html'));
