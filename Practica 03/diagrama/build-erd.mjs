@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(dir, '..');
-const sourceName = 'respaldo_31_10_2026_DGC.sql';
+const sourceName = 'respaldo_06_11_2026_DGC.sql';
 const source = path.join(root, 'backups', sourceName);
 const modelPath = path.join(dir, 'schema-model.json');
 const sql = fs.readFileSync(source, 'utf8');

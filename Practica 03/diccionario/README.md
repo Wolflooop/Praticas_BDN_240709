@@ -4,8 +4,8 @@ Referencia estática del esquema de `db_test_7b`, generada desde el mismo modelo
 
 ## Fuente
 
-- Respaldo: `../backups/respaldo_31_10_2026_DGC.sql`
-- Fecha de generación indicada por el volcado: 2026-11-03 (03:05:26).
+- Respaldo: `../backups/respaldo_06_11_2026_DGC.sql`
+- Fecha de generación indicada por el volcado: 2026-11-12 (11:29:24).
 - Versión del servidor indicada en el archivo: MySQL 8.4.9.
 - No requiere conexión activa a MySQL y no contiene ni modifica filas.
 

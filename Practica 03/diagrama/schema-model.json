@@ -1,9 +1,9 @@
 {
   "database": "db_test_7b",
   "mysqlVersion": "8.4.9",
-  "source": "backups/respaldo_31_10_2026_DGC.sql",
-  "backupDate": "2026-11-03",
-  "generatedAt": "2026-11-03",
+  "source": "backups/respaldo_06_11_2026_DGC.sql",
+  "backupDate": "2026-11-12",
+  "generatedAt": "2026-11-12",
   "tables": [
     {
       "name": "tb_carts",
@@ -292,7 +292,7 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=28066 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=59385 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
     },
     {
       "name": "tb_order_cancellations",
@@ -1486,7 +1486,7 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=5011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=15011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
     },
     {
       "name": "tb_refunds",
