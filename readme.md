@@ -13,13 +13,16 @@
 |:---:|---|---|:---:|:---:|
 | 1 | **Metodología de Evaluación de la Asignatura** | Transcribir en la libreta, analizar y comprender la metodología de evaluación, los criterios y las fechas establecidas para la asignatura. | 5 | 🟢 Concluida |
 | 2 | **Conexiones Remotas para Bases de Datos SQL** | Configurar y administrar usuarios, permisos y privilegios para establecer conexiones remotas a bases de datos SQL mediante redes locales o Internet. | 60 | 🟢 Concluida |
-| 3 | **Manipulación de Datos en Conexiones Remotas a Bases de Datos Relacionales** | Implementar procedimientos almacenados, funciones y tablas derivadas, así como realizar procesos de importación y manipulación de datos en un entorno de comercio electrónico (*E-Commerce*), mediante conexiones remotas. | 100 | 🟡 En progreso |
-| 4 | **Examen Práctico: Instalación de PostgreSQL y MySQL en un VPS** | Instalar, configurar y desplegar servicios de bases de datos relacionales PostgreSQL y MySQL en un servidor privado virtual (VPS), así como preparar y ejecutar pruebas con datos simulados mediante conexiones remotas. | 100 | 🟡 En progreso |
+| 3 | **Manipulación de Datos en Conexiones Remotas a Bases de Datos Relacionales** | Implementar procedimientos almacenados, funciones y tablas derivadas, así como realizar procesos de importación y manipulación de datos en un entorno de comercio electrónico (*E-Commerce*), mediante conexiones remotas. | 100 | 🟢 Concluida |
+| 4 | **Examen Práctico: Instalación de PostgreSQL y MySQL en un VPS** | Instalar, configurar y desplegar servicios de bases de datos relacionales PostgreSQL y MySQL en un servidor privado virtual (VPS), así como preparar y ejecutar pruebas con datos simulados mediante conexiones remotas. | Por definir | 🟡 En progreso |
 
 ---
 
-
 ## Documentación de la Práctica 03
 
-- [Diagrama Entidad-Relación](Practica%2003/diagrama/modelo-db-test-7b.html)
-- [Diccionario de datos](Practica%2003/diccionario/index.html)
+Consulta los siguientes recursos técnicos publicados mediante GitHub Pages:
+
+- [Diagrama Entidad-Relación](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2003/diagrama/modelo-db-test-7b.html)
+- [Diccionario de datos](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2003/diccionario/)
+
+---
