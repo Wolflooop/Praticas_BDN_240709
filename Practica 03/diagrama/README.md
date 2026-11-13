@@ -5,7 +5,7 @@ Diagrama interactivo, autónomo y estático de `db_test_7b`.
 ## Fuente
 
 - Respaldo: `../backups/respaldo_06_11_2026_DGC.sql`
-- Fecha de generación indicada por el volcado: 2026-11-12 (11:29:24).
+- Fecha de generación indicada por el volcado: 2026-11-12 (13:50:23).
 - Versión del servidor indicada en el archivo: MySQL 8.4.9.
 - El proyecto no necesita conectarse a MySQL y no modifica datos.
 

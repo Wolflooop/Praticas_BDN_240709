@@ -5,7 +5,7 @@ Referencia estática del esquema de `db_test_7b`, generada desde el mismo modelo
 ## Fuente
 
 - Respaldo: `../backups/respaldo_06_11_2026_DGC.sql`
-- Fecha de generación indicada por el volcado: 2026-11-12 (11:29:24).
+- Fecha de generación indicada por el volcado: 2026-11-12 (13:50:23).
 - Versión del servidor indicada en el archivo: MySQL 8.4.9.
 - No requiere conexión activa a MySQL y no modifica filas; muestra cuántos registros tiene cada tabla según el respaldo (cuenta de filas de los `INSERT`), sin reproducir su contenido.
 
