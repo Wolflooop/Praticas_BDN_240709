@@ -7,7 +7,7 @@ Referencia estática del esquema de `db_test_7b`, generada desde el mismo modelo
 - Respaldo: `../backups/respaldo_06_11_2026_DGC.sql`
 - Fecha de generación indicada por el volcado: 2026-11-12 (11:29:24).
 - Versión del servidor indicada en el archivo: MySQL 8.4.9.
-- No requiere conexión activa a MySQL y no contiene ni modifica filas.
+- No requiere conexión activa a MySQL y no modifica filas; muestra cuántos registros tiene cada tabla según el respaldo (cuenta de filas de los `INSERT`), sin reproducir su contenido.
 
 ## Tecnologías y requisitos
 
@@ -19,7 +19,7 @@ Abre `index.html` en un navegador moderno. También puedes servirlo desde la ra�
 
 ## Funcionalidades
 
-Índice de tablas, búsqueda, resumen del esquema, columnas con tipo, nulabilidad, valor predeterminado, PK/FK, autoincremento, índices, restricciones, relaciones y objetos SQL documentados. La semántica que no se puede asegurar solo con el DDL se presenta como tal; no se inventan registros.
+Índice de tablas, búsqueda, resumen del esquema, columnas con tipo, nulabilidad, valor predeterminado, PK/FK, autoincremento, índices, restricciones, relaciones y objetos SQL documentados. Cada tabla indica su número de registros actuales. La semántica que no se puede asegurar solo con el DDL se presenta como tal; no se inventan registros.
 
 ## Actualizar desde otro respaldo
 

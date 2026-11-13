@@ -18,11 +18,3 @@
 
 ---
 
-## Documentación de la Práctica 03
-
-Consulta los siguientes recursos técnicos publicados mediante GitHub Pages:
-
-- [Diagrama Entidad-Relación](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2003/diagrama/modelo-db-test-7b.html)
-- [Diccionario de datos](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2003/diccionario/)
-
----

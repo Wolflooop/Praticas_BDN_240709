@@ -19,7 +19,7 @@ Abre `modelo-db-test-7b.html` en un navegador moderno. Para servirlo localmente 
 
 ## Funcionalidades
 
-Búsqueda por tabla y columna, selección de entidades y relaciones, panel contextual, distribución automática, arrastre, zoom, ajuste y restablecimiento de vista, filtros de relaciones y recorrido animado de FKs. Los datos del modelo proceden del DDL, no de filas del respaldo.
+Búsqueda por tabla y columna, selección de entidades y relaciones, panel contextual, distribución automática, arrastre, zoom, ajuste y restablecimiento de vista, filtros de relaciones y recorrido animado de FKs. La estructura procede del DDL; el número de registros de cada tabla (en el rótulo de la entidad y en el panel contextual) es el conteo de filas de los `INSERT` del respaldo. No se muestran los datos de las filas.
 
 ## Actualizar desde otro respaldo
 

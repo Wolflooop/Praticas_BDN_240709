@@ -1,0 +1,243 @@
+{
+ "tb_carts": {
+  "ID": "Identificador único del carrito; clave primaria autoincremental.",
+  "user_ID": "Usuario dueño del carrito (FK a tb_users.ID). Es único: cada usuario tiene como máximo un carrito.",
+  "status": "Estado lógico del carrito almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora de creación del carrito; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_logs": {
+  "ID": "Identificador único del evento de bitácora; clave primaria autoincremental.",
+  "table_name": "Nombre de la tabla sobre la que se realizó la operación auditada.",
+  "record_id": "ID del registro afectado dentro de la tabla indicada en table_name. No tiene FK porque la bitácora es polimórfica (apunta a distintas tablas).",
+  "table_operation": "Tipo de operación registrada: Create (alta), Read (consulta), Update (modificación) o Delete (baja).",
+  "db_user": "Usuario de base de datos que ejecutó la operación (por ejemplo, el definer del trigger).",
+  "table_description": "Texto que describe el evento registrado, normalmente el resumen del cambio realizado.",
+  "operation_date": "Fecha y hora en que ocurrió la operación auditada.",
+  "operation_status": "Resultado de la operación registrada, almacenado como bit. Los triggers del respaldo lo guardan con el valor 1 (predeterminado)."
+ },
+ "tb_order_cancellations": {
+  "ID": "Identificador único de la solicitud de cancelación; clave primaria autoincremental.",
+  "order_ID": "Pedido cuya cancelación se solicita (FK a tb_orders.ID).",
+  "requested_by": "Usuario que solicita la cancelación (FK a tb_users.ID).",
+  "reason": "Motivo de la cancelación expresado en texto libre.",
+  "status": "Etapa de la solicitud: Requested (solicitada), Approved (aprobada), Rejected (rechazada) o Completed (completada).",
+  "creation_date": "Fecha y hora en que se registró la solicitud; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_orders": {
+  "ID": "Identificador único del pedido; clave primaria autoincremental.",
+  "seller_ID": "Usuario vendedor al que pertenece el pedido (FK a tb_users.ID).",
+  "subtotal": "Importe de los artículos del pedido antes del envío, con dos decimales. No puede ser negativo (CHECK subtotal >= 0).",
+  "shipping_cost": "Costo de envío del pedido, con dos decimales. No puede ser negativo (CHECK shipping_cost >= 0).",
+  "fulfillment_status": "Estado de cumplimiento: Pending (pendiente), Accepted (aceptado), Preparing (en preparación), Sent (enviado), Delivered (entregado), Canceled (cancelado) o Returned (devuelto).",
+  "status": "Estado lógico del pedido almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora de creación del pedido; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_payment_methods": {
+  "ID": "Identificador único del método de pago del catálogo; clave primaria autoincremental.",
+  "name": "Nombre del método de pago (por ejemplo, tarjeta, transferencia o efectivo).",
+  "description": "Explicación del método de pago y de cómo se utiliza.",
+  "status": "Estado lógico del método de pago almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se dio de alta el método; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_payment_transaction": {
+  "ID": "Identificador único de la transacción de pago; clave primaria autoincremental.",
+  "payment_ID": "Pago al que pertenece la transacción (FK a tb_payments.ID).",
+  "transaction_reference": "Folio o referencia de la transacción asignada por el gateway o procesador de pagos externo.",
+  "gateway_response": "Respuesta devuelta por el gateway de pago, guardada como texto.",
+  "status": "Estado lógico del registro de transacción almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se registró la transacción; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_payments": {
+  "ID": "Identificador único del pago; clave primaria autoincremental.",
+  "order_ID": "Pedido que se paga (FK a tb_orders.ID).",
+  "user_payment_method_ID": "Método de pago guardado del usuario con el que se realizó el pago (FK a tbd_user_payment_methods.ID); es opcional y puede ser NULL.",
+  "amount": "Importe del pago, con dos decimales.",
+  "payment_status": "Estado del pago: Pending (pendiente), Approved (aprobado), Rejected (rechazado) o Refunded (reembolsado).",
+  "creation_date": "Fecha y hora en que se registró el pago; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_people": {
+  "person_ID": "Identificador único de la persona; clave primaria autoincremental.",
+  "user_ID": "Cuenta de usuario asociada a la persona (FK a tb_users.ID); es opcional y única, por lo que una cuenta se vincula como máximo con una persona.",
+  "courtesy_title": "Tratamiento de cortesía de la persona (por ejemplo, Sr., Sra., Dr.).",
+  "given_names": "Nombre o nombres de pila de la persona.",
+  "family_names": "Apellidos de la persona.",
+  "birth_date": "Fecha de nacimiento de la persona.",
+  "gender": "Género declarado por la persona: Hombre, Mujer o Prefiero no decirlo.",
+  "country_code": "Código de país de dos letras (por ejemplo, MX); el esquema no define un catálogo de valores.",
+  "phone": "Número telefónico de contacto, guardado como texto para conservar prefijos y formato.",
+  "status": "Estado lógico del registro de persona almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se registró a la persona; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_products": {
+  "ID": "Identificador único del producto; clave primaria autoincremental.",
+  "SKU": "Código comercial único del producto (Stock Keeping Unit); no puede repetirse.",
+  "name": "Nombre comercial del producto que se muestra en el catálogo.",
+  "description": "Descripción detallada del producto.",
+  "current_price": "Precio vigente del producto, con dos decimales.",
+  "current_stock": "Número de unidades disponibles en inventario; no admite valores negativos.",
+  "status": "Estado lógico del producto almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se dio de alta el producto; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_refunds": {
+  "ID": "Identificador único del reembolso; clave primaria autoincremental.",
+  "payment_ID": "Pago que se reembolsa (FK a tb_payments.ID).",
+  "amount": "Importe reembolsado, con dos decimales.",
+  "reason": "Motivo del reembolso expresado en texto libre.",
+  "creation_date": "Fecha y hora en que se registró el reembolso; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_returns": {
+  "ID": "Identificador único de la solicitud de devolución; clave primaria autoincremental.",
+  "order_ID": "Pedido del que se solicita la devolución (FK a tb_orders.ID).",
+  "requested_by": "Usuario que solicita la devolución (FK a tb_users.ID).",
+  "reason": "Motivo de la devolución expresado en texto libre.",
+  "status": "Etapa de la solicitud: Requested (solicitada), Approved (aprobada), Rejected (rechazada) o Completed (completada).",
+  "creation_date": "Fecha y hora en que se registró la solicitud; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_shipments": {
+  "ID": "Identificador único del envío; clave primaria autoincremental.",
+  "order_ID": "Pedido que se envía (FK a tb_orders.ID).",
+  "tracking_number": "Número de guía o rastreo asignado por la paquetería.",
+  "carrier": "Nombre de la paquetería o transportista que realiza el envío.",
+  "shipping_status": "Estado del envío: Preparing (en preparación), In_Transit (en tránsito), Delivered (entregado) o Failed (fallido).",
+  "shipped_date": "Fecha y hora en que el envío salió o fue despachado.",
+  "delivered_date": "Fecha y hora en que el envío fue entregado al destinatario.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tb_user_addresses": {
+  "ID": "Identificador único de la dirección; clave primaria autoincremental.",
+  "user_ID": "Usuario propietario de la dirección (FK a tb_users.ID).",
+  "address_label": "Etiqueta con la que el usuario identifica la dirección (por ejemplo, Casa u Oficina).",
+  "recipient_name": "Nombre completo de quien recibe el envío en esa dirección.",
+  "recipient_phone": "Teléfono de contacto de quien recibe el envío.",
+  "delivery_instructions": "Indicaciones adicionales para el repartidor (referencias, horarios, acceso).",
+  "latitude": "Latitud geográfica de la dirección, con 7 decimales. Debe estar entre −90 y 90 y se captura junto con longitude (ambas o ninguna).",
+  "longitude": "Longitud geográfica de la dirección, con 7 decimales. Debe estar entre −180 y 180 y se captura junto con latitude (ambas o ninguna).",
+  "is_default": "Marca si es la dirección predeterminada del usuario (1 = sí, 0 = no). Solo puede haber una predeterminada por usuario.",
+  "status": "Estado lógico del registro de dirección almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se guardó la dirección; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado).",
+  "default_user_ID": "Columna generada (almacenada): toma el valor de user_ID cuando is_default = 1 y NULL en caso contrario. Su índice UNIQUE garantiza una sola dirección predeterminada por usuario."
+ },
+ "tb_users": {
+  "ID": "Identificador único de la cuenta de usuario; clave primaria autoincremental.",
+  "email": "Correo electrónico de la cuenta; es único y sirve como dato de acceso.",
+  "nick": "Alias o nombre de usuario de la cuenta; es único.",
+  "password": "Contraseña de acceso almacenada como texto (hasta 255 caracteres). El esquema no define cómo se protege; se espera guardar un hash, no la contraseña en claro.",
+  "creation_date": "Fecha y hora en que se creó la cuenta; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado).",
+  "last_login": "Fecha y hora del último inicio de sesión registrado de la cuenta.",
+  "status": "Estado lógico del cuenta almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica)."
+ },
+ "tbc_categories": {
+  "ID": "Identificador único de la categoría; clave primaria autoincremental.",
+  "name": "Nombre de la categoría; es único dentro del catálogo.",
+  "description": "Explicación del tipo de productos que agrupa la categoría.",
+  "sup_id_category": "Categoría superior en la jerarquía (FK a tbc_categories.ID). Es NULL en las categorías de nivel raíz.",
+  "status": "Estado lógico del categoría almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se dio de alta la categoría; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbc_payment_methods_types": {
+  "ID": "Identificador único del tipo de método de pago; clave primaria autoincremental.",
+  "code": "Código corto y único que identifica el tipo de método de pago.",
+  "description": "Explicación del tipo de método de pago.",
+  "status": "Estado lógico del tipo de método de pago almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se dio de alta el tipo; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_address_components": {
+  "ID": "Identificador único del componente de dirección; clave primaria autoincremental.",
+  "address_ID": "Dirección a la que pertenece el componente (FK a tb_user_addresses.ID).",
+  "value": "Contenido del componente (por ejemplo, el nombre de la calle, colonia o ciudad).",
+  "component_type": "Tipo de componente de dirección (por ejemplo, calle, colonia, ciudad); es texto libre sin catálogo en el esquema.",
+  "status": "Estado lógico del componente almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "address_sup_ID": "Componente padre dentro de la misma dirección (FK compuesta con address_ID a tbd_address_components); es NULL si no tiene padre.",
+  "creation_date": "Fecha y hora en que se registró el componente; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_cancellation_items": {
+  "ID": "Identificador único del detalle de cancelación; clave primaria autoincremental.",
+  "cancellation_ID": "Solicitud de cancelación a la que se vincula el detalle (FK a tb_order_cancellations.ID); es opcional.",
+  "order_ID": "Pedido al que se refiere el detalle (FK a tb_orders.ID).",
+  "reason": "Motivo de la cancelación en texto libre.",
+  "requested_by": "Usuario que solicitó la cancelación (FK a tb_users.ID).",
+  "creation_date": "Fecha y hora en que se registró el detalle; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_cart_items": {
+  "cart_ID": "Carrito al que pertenece el artículo (FK a tb_carts.ID); forma parte de la clave primaria.",
+  "provider_ID": "Usuario proveedor que ofrece el producto (FK compuesta con product_ID a tbd_products_users_providers); forma parte de la clave primaria.",
+  "product_ID": "Producto agregado al carrito (FK compuesta con provider_ID a tbd_products_users_providers); forma parte de la clave primaria.",
+  "quantity": "Número de unidades del producto en el carrito; debe ser mayor que 0.",
+  "creation_date": "Fecha y hora en que se agregó el artículo al carrito; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_order_items": {
+  "ID": "Identificador único de la partida del pedido; clave primaria autoincremental.",
+  "seller_order_ID": "Pedido al que pertenece la partida (FK a tb_orders.ID).",
+  "product_ID": "Producto comprado (FK compuesta con provider_ID a tbd_products_users_providers).",
+  "provider_ID": "Usuario proveedor que vende el producto (FK compuesta con product_ID a tbd_products_users_providers).",
+  "product_name": "Nombre del producto copiado al momento de la compra, para conservar el histórico aunque el producto cambie.",
+  "quantity": "Número de unidades compradas; debe ser mayor que 0.",
+  "unit_price": "Precio por unidad capturado al momento de la compra; no puede ser negativo.",
+  "subtotal": "Importe de la partida. Columna generada (almacenada) que calcula quantity × unit_price.",
+  "creation_date": "Fecha y hora en que se registró la partida; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_products_categories": {
+  "product_Id": "Producto asignado a la categoría (FK a tb_products.ID); forma parte de la clave primaria.",
+  "category_Id": "Categoría asignada al producto (FK a tbc_categories.ID); forma parte de la clave primaria.",
+  "status": "Estado lógico del vínculo producto-categoría almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se asignó la categoría al producto; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_products_users_providers": {
+  "user_ID": "Usuario proveedor que ofrece el producto (FK a tb_users.ID); forma parte de la clave primaria.",
+  "product_ID": "Producto ofrecido por el proveedor (FK a tb_products.ID); forma parte de la clave primaria.",
+  "type_ownership": "Relación del proveedor con el producto: Owner (propietario), Reseller (revendedor) o Distributor (distribuidor).",
+  "status": "Estado lógico del oferta almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "avalaible_date": "Fecha y hora a partir de la cual la oferta está disponible (el nombre de la columna conserva la ortografía original del esquema).",
+  "creation_date": "Fecha y hora en que se registró la oferta; se asigna automáticamente.",
+  "last_date": "Fecha y hora en que termina la vigencia de la oferta.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_return_items": {
+  "ID": "Identificador único del detalle de devolución; clave primaria autoincremental.",
+  "return_ID": "Solicitud de devolución a la que se vincula el detalle (FK a tb_returns.ID); es opcional.",
+  "order_ID": "Pedido al que se refiere el detalle (FK a tb_orders.ID).",
+  "reason": "Motivo de la devolución en texto libre.",
+  "status": "Etapa de la devolución: Requested (solicitada), Approved (aprobada), Rejected (rechazada) o Completed (completada).",
+  "creation_date": "Fecha y hora en que se registró el detalle; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_user_payment_methods": {
+  "ID": "Identificador único del método de pago guardado; clave primaria autoincremental.",
+  "user_ID": "Usuario dueño del método de pago (FK a tb_users.ID).",
+  "payment_method_type_ID": "Tipo de método de pago (FK a tbc_payment_methods_types.ID).",
+  "provider": "Nombre del proveedor externo que gestiona el método (por ejemplo, la pasarela o procesador); junto con provider_method_ref forma un índice único.",
+  "provider_method_ref": "Referencia o token del método de pago en el proveedor externo; evita guardar datos sensibles de la tarjeta.",
+  "label": "Etiqueta que el usuario asigna al método (por ejemplo, Tarjeta personal); es opcional.",
+  "last_four": "Últimos cuatro caracteres del medio de pago, usados solo para identificarlo visualmente.",
+  "is_default": "Marca si es el método de pago predeterminado del usuario (1 = sí, 0 = no).",
+  "status": "Estado lógico del método de pago guardado almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se guardó el método de pago; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ },
+ "tbd_users_wishlist_products": {
+  "user_ID": "Usuario que guarda el producto en su lista de deseos (FK a tb_users.ID); forma parte de la clave primaria.",
+  "product_ID": "Producto guardado en la lista de deseos (FK a tb_products.ID); forma parte de la clave primaria.",
+  "status": "Estado lógico del elemento de la lista de deseos almacenado como bit: 1 = activo/vigente, 0 = inactivo (baja lógica).",
+  "creation_date": "Fecha y hora en que se agregó el producto a la lista; se asigna automáticamente.",
+  "last_update": "Fecha y hora de la última modificación del registro; MySQL la actualiza automáticamente en cada UPDATE (NULL si nunca se ha modificado)."
+ }
+}

@@ -3,7 +3,7 @@
   "mysqlVersion": "8.4.9",
   "source": "backups/respaldo_06_11_2026_DGC.sql",
   "backupDate": "2026-11-12",
-  "generatedAt": "2026-11-12",
+  "generatedAt": "2026-11-13",
   "tables": [
     {
       "name": "tb_carts",
@@ -130,7 +130,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_logs",
@@ -292,7 +293,8 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=59385 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=59385 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 48323
     },
     {
       "name": "tb_order_cancellations",
@@ -477,7 +479,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_orders",
@@ -655,7 +658,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_payment_methods",
@@ -763,7 +767,8 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_payment_transaction",
@@ -917,7 +922,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_payments",
@@ -1102,7 +1108,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_people",
@@ -1327,7 +1334,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=7503 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=7503 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 7502
     },
     {
       "name": "tb_products",
@@ -1486,7 +1494,8 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=15011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=15011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 15010
     },
     {
       "name": "tb_refunds",
@@ -1626,7 +1635,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_returns",
@@ -1811,7 +1821,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_shipments",
@@ -1979,7 +1990,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_user_addresses",
@@ -2244,7 +2256,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tb_users",
@@ -2398,7 +2411,8 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=7524 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=7524 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 7502
     },
     {
       "name": "tbc_categories",
@@ -2561,7 +2575,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 107
     },
     {
       "name": "tbc_payment_methods_types",
@@ -2678,7 +2693,8 @@
       ],
       "constraints": [],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_address_components",
@@ -2885,7 +2901,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_cancellation_items",
@@ -3101,7 +3118,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_cart_items",
@@ -3281,7 +3299,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_order_items",
@@ -3527,7 +3546,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_products_categories",
@@ -3679,7 +3699,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 16202
     },
     {
       "name": "tbd_products_users_providers",
@@ -3876,7 +3897,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_return_items",
@@ -4061,7 +4083,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_user_payment_methods",
@@ -4314,7 +4337,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     },
     {
       "name": "tbd_users_wishlist_products",
@@ -4466,7 +4490,8 @@
         }
       ],
       "engine": "InnoDB",
-      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+      "options": "InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci",
+      "rowCount": 0
     }
   ],
   "relationships": [
@@ -5671,6 +5696,7 @@
   },
   "summary": {
     "tables": 25,
+    "rows": 94646,
     "columns": 191,
     "primaryKeys": 25,
     "foreignKeys": 33,
