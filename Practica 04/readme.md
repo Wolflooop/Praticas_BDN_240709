@@ -43,8 +43,8 @@ Se contemplaron cinco escenarios para evaluar el funcionamiento de los procesos 
 
 Los siguientes recursos permiten consultar la estructura y documentación de la base de datos utilizada durante las simulaciones:
 
-- [Diagrama Entidad-Relación (MERE)](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2004/diagrama/modelo-db-test-7b.html)
-- [Diccionario de datos](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2004/diccionario/)
+- [Diagrama Entidad-Relación (MERE)](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2004/docs/diagrama/modelo-db-test-7b.html)
+- [Diccionario de datos](https://wolflooop.github.io/Praticas_BDN_240709/Practica%2004/docs/diccionario/)
 
 ---
 
